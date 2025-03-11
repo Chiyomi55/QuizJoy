@@ -1,0 +1,210 @@
+.problem-bank {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 知识点标签样式 */
+.topics-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.topic-tag {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #f5f7fa;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.topic-tag.selected {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.topic-tag.selected .topic-count {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.topic-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.topic-count {
+  color: #909399;
+  font-size: 0.9em;
+}
+
+/* 筛选栏样式更新 */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.filter-bar select {
+  padding: 8px 12px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  outline: none;
+  min-width: 120px;
+  height: 38px;  /* 固定高度 */
+  cursor: pointer;
+  background-color: white;
+}
+
+.filter-bar select:hover {
+  border-color: var(--primary-color);
+}
+
+.filter-bar select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.1);
+}
+
+/* 移除多选相关样式 */
+.difficulty-select,
+.status-select {
+  min-width: 140px;  /* 稍微加宽一点 */
+}
+
+/* 搜索框样式更新 */
+.search-box {
+  position: relative;
+  flex: 1;
+  max-width: 250px;
+  display: flex;
+  align-items: center;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 8px 40px 8px 12px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  outline: none;
+}
+
+.search-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  padding: 0 12px;
+  border: none;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.search-button:hover {
+  background-color: var(--hover-color);
+}
+
+/* 题目表格样式 */
+.problems-table-container {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+}
+
+.problems-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.problems-table th,
+.problems-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #ebeef5;
+}
+
+.problems-table th {
+  background-color: #f5f7fa;
+  color: #606266;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.problem-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  margin-right: 4px;
+  background-color: #f0f2f5;
+  border-radius: 2px;
+  font-size: 0.9em;
+  color: #606266;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 2px;
+  font-size: 0.9em;
+}
+
+.status-badge.正确 {
+  background-color: #67C23A;
+  color: white;
+}
+
+.status-badge.错误 {
+  background-color: #F56C6C;
+  color: white;
+}
+
+.status-badge.暂无 {
+  background-color: #f5f7fa;
+  color: #909399;
+  border: 1px solid #ebeef5;
+}
+
+/* 星级样式 */
+.stars {
+  display: flex;
+  gap: 2px;
+  color: #fb7d00f0;  /* 更深的金黄色 */
+}
+
+/* 未填充的星星使用更深的颜色 */
+.stars svg {
+  font-size: 1rem;  /* 稍微调大一点 */
+}
+
+.stars svg:not(.filled) {
+  color: #ff8204fd;  /* 保持相同的颜色 */
+  opacity: 0.6;  /* 降低透明度但不要太透明 */
+}
+
+/* 添加题目行的悬停效果 */
+.problems-table tbody tr {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.problems-table tbody tr:hover {
+  background-color: #f5f5f5;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+} 

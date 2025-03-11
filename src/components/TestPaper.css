@@ -1,0 +1,345 @@
+.test-paper {
+  display: flex;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: calc(100vh - 100px);
+}
+
+/* 左侧导航栏 */
+.question-nav {
+  width: 200px;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  color: #333;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.question-numbers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.question-number {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: #f0f2f5;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.question-number.active {
+  background: var(--primary-color);
+  color: #333;
+  font-weight: bold;
+}
+
+.question-number.answered {
+  background: #e1f5fe;
+  color: #0288d1;
+}
+
+.submit-test-btn {
+  margin-top: auto;
+  padding: 12px;
+  background: var(--primary-color);
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-test-btn:hover {
+  background: var(--hover-color);
+  transform: translateY(-1px);
+}
+
+/* 主要内容区域 */
+.question-content {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  min-height: 600px;
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.question-type {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #e3f2fd;
+  color: #1976d2;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.question-title {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.question-progress {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.question-body {
+  flex: 1;
+  margin-bottom: 24px;
+}
+
+.question-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 24px;
+}
+
+/* 选项样式 */
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.option-item:hover {
+  background: #f0f2f5;
+}
+
+/* 填空题样式 */
+.fill-blank-container input {
+  width: 100%;
+  max-width: 300px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+/* 解答题样式 */
+.solution-container textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+/* 导航按钮和提交按钮统一样式 */
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--primary-color);
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: var(--hover-color);
+  transform: translateY(-1px);
+}
+
+.nav-btn.submit {
+  background: #f5f5f5;  /* 浅灰色背景 */
+  color: #333;  /* 黑色文字 */
+  gap: 8px;
+}
+
+.nav-btn.submit:hover {
+  background: #e0e0e0;
+}
+
+.nav-btn.submit svg {
+  margin-left: 4px;
+}
+
+/* 删除之前的 submit-btn 相关样式 */
+
+.question-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.left-buttons, .right-buttons {
+  min-width: 100px; /* 保持按钮区域宽度一致 */
+}
+
+.right-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 退出按钮样式 */
+.exit-test-btn {
+  width: 100%;
+  margin-top: auto;  /* 将按钮推到底部 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: #FF6B6B;  /* 更明亮的红色 */
+  color: white;  /* 白色文字 */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.exit-test-btn:hover {
+  background: #FF8585;
+  transform: translateY(-1px);
+}
+
+/* 退出确认对话框样式 */
+.exit-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.exit-confirm-dialog {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.exit-confirm-dialog h3 {
+  margin: 0 0 16px 0;
+  color: #333;
+}
+
+.exit-confirm-dialog p {
+  margin: 0 0 24px 0;
+  color: #666;
+}
+
+.dialog-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.dialog-buttons button {
+  padding: 8px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.confirm-btn {
+  background: #FF6B6B;  /* 与退出按钮保持一致 */
+  color: white;
+}
+
+.confirm-btn:hover {
+  background: #FF8585;
+}
+
+/* 左侧提交试卷按钮样式 - 使用更明亮的绿色 */
+.submit-paper-btn {
+  width: 100%;
+  margin-bottom: 12px;  /* 与退出按钮保持间距 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: #5CBA6F;  /* 更明亮的绿色 */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.submit-paper-btn:hover {
+  background: #4CAF50;
+  transform: translateY(-1px);
+}
+
+/* 确认对话框中的提交按钮样式 */
+.confirm-btn.submit {
+  background: #5CBA6F;  /* 与左侧提交按钮保持一致 */
+}
+
+.confirm-btn.submit:hover {
+  background: #4CAF50;
+} 

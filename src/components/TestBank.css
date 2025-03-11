@@ -1,0 +1,230 @@
+.test-bank {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 筛选栏样式 */
+.filter-bar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  flex-wrap: wrap;
+}
+
+.filter-bar select {
+  min-width: 120px;
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  outline: none;
+  height: 38px;
+  cursor: pointer;
+  background-color: white;
+}
+
+/* 题单卡片容器 */
+.test-sets-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+/* 题单卡片样式 */
+.test-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.test-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* 已完成的卡片样式 */
+.test-card.completed {
+  background-color: #f5f7fa;
+  cursor: default;
+}
+
+.test-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.test-card-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+  flex: 1;
+  margin-right: 16px;
+}
+
+.difficulty-stars {
+  color: #fb7d00f0;
+  display: flex;
+  gap: 2px;
+}
+
+.test-description {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.test-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.duration {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.test-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.topic-tag {
+  background-color: #f0f2f5;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.completion-info {
+  text-align: center;
+  padding: 8px;
+  background-color: #e4e7ed;
+  border-radius: 4px;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.start-test-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--primary-color);
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.start-test-btn:hover {
+  background-color: var(--hover-color);
+}
+
+/* 搜索框样式 */
+.search-box {
+  position: relative;
+  flex: 1;
+  max-width: 250px;
+  display: flex;
+  align-items: center;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 8px 40px 8px 12px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  outline: none;
+}
+
+.search-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  padding: 0 12px;
+  border: none;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.search-button:hover {
+  background-color: var(--hover-color);
+}
+
+/* 添加老师布置的题单样式 */
+.test-card.teacher-assigned {
+  background-color: #fff6f6;
+  border: 1px solid var(--primary-color);
+}
+
+.test-type {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.teacher-assigned .test-type {
+  background-color: var(--primary-color);
+  color: #333;
+}
+
+.deadline-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ff4d4f;
+  font-size: 0.9rem;
+  margin: 8px 0;
+}
+
+/* 添加分类标签样式 */
+.test-type-tags {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.type-tag {
+  padding: 6px 16px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #f5f5f5;
+}
+
+.type-tag.active {
+  background: var(--primary-color);
+  color: #333;
+}
+
+.type-tag:hover {
+  transform: translateY(-2px);
+} 

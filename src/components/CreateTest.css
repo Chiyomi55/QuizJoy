@@ -1,0 +1,259 @@
+.create-test {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.test-setup {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.setup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.difficulty-group {
+  margin-top: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.difficulty-stars {
+  display: flex;
+  gap: 8px;
+  color: #faad14;
+  font-size: 1.2rem;
+}
+
+.difficulty-stars span {
+  cursor: pointer;
+}
+
+.question-selection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.question-bank,
+.selected-questions {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 600px;
+  overflow-y: auto;
+}
+
+.search-bar {
+  position: relative;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 8px 32px 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.search-bar svg {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+.question-info {
+  flex: 1;
+  padding: 8px;
+  transition: background-color 0.2s;
+  border-radius: 6px;
+}
+
+.question-info:hover {
+  background-color: #f5f5f5;
+}
+
+.question-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.question-item:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.question-info h4 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+}
+
+.question-tags {
+  display: flex;
+  gap: 8px;
+}
+
+.topic-tag {
+  padding: 2px 8px;
+  background: #f0f2f5;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.add-btn {
+  padding: 6px 16px;
+  background: var(--primary-color);
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.question-order {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f2f5;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.question-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.question-actions button {
+  padding: 6px;
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #666;
+}
+
+.submit-section {
+  text-align: center;
+}
+
+.submit-btn {
+  padding: 12px 48px;
+  background: var(--primary-color);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.filter-section {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.filter-row select {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+}
+
+.question-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 8px 0;
+}
+
+.question-type {
+  padding: 2px 8px;
+  background: var(--primary-color);
+  border-radius: 12px;
+  font-size: 0.85rem;
+}
+
+.difficulty-stars {
+  color: #faad14;
+  font-size: 0.9rem;
+}
+
+.add-btn.selected {
+  background: #f0f0f0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.question-bank {
+  display: flex;
+  flex-direction: column;
+}
+
+.question-list {
+  flex: 1;
+  overflow-y: auto;
+} 

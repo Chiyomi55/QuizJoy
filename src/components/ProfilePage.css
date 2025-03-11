@@ -1,0 +1,354 @@
+.profile-container {
+  max-width: 1200px;  /* 与题库页保持一致的宽度 */
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 页面标题 */
+.profile-title {
+  font-size: 1.2rem;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+/* 主要内容区域布局 */
+.profile-content {
+  display: grid;
+  grid-template-columns: 250px 1fr;  /* 减小左侧宽度 */
+  gap: 1.5rem;
+}
+
+/* 右侧内容区域 */
+.profile-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* 左侧个人信息区域 */
+.profile-left {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  height: fit-content;
+}
+
+.avatar-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.avatar-container {
+  position: relative;
+  width: 100px;  /* 减小头像大小 */
+  height: 100px;
+  margin: 0 auto;
+}
+
+.avatar-container img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-color);
+}
+
+.upload-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.user-info {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.info-display h2 {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.info-display p {
+  margin: 8px 0;
+  color: #666;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edit-form input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.achievements {
+  margin-top: 2rem;
+}
+
+.achievements h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.achievement-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.achievement-tag {
+  background-color: var(--accent-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: var(--text-color);
+}
+
+/* 下方数据展示区域 */
+.data-visualization {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.knowledge-mastery,
+.score-trends {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  height: 300px;  /* 固定高度 */
+}
+
+.knowledge-mastery h3,
+.score-trends h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.chart-container {
+  height: 220px;  /* 固定图表高度 */
+  width: 100%;
+  position: relative;
+}
+
+/* 左侧排名显示样式 */
+.ranking-display {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.ranking-display h3 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.ranking {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.ranking-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.ranking-total {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* 登录提示样式 */
+.login-prompt {
+  text-align: center;
+  padding: 4rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  margin-top: 2rem;
+}
+
+.login-prompt h2 {
+  margin-bottom: 2rem;
+  color: var(--text-color);
+}
+
+.login-prompt .login-btn {
+  padding: 0.75rem 2rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.login-prompt .login-btn:hover {
+  background-color: var(--hover-color);
+}
+
+/* 排名和成绩趋势部分 */
+.score-trends {
+  display: flex;
+  flex-direction: column;
+}
+
+.score-chart {
+  height: 250px;
+  width: 100%;
+  position: relative;
+}
+
+.score-chart > div {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* 热力图颜色 - 紫色渐变 */
+.react-calendar-heatmap .color-empty {
+  fill: #f8f8f8;
+}
+
+.react-calendar-heatmap .color-scale-0 {
+  fill: #F3E5F5; /* 最浅的紫色 */
+}
+
+.react-calendar-heatmap .color-scale-1 {
+  fill: #E1BEE7;
+}
+
+.react-calendar-heatmap .color-scale-2 {
+  fill: #CE93D8;
+}
+
+.react-calendar-heatmap .color-scale-3 {
+  fill: #BA68C8; /* 最深的紫色 */
+}
+
+/* 编辑资料按钮样式 */
+.info-display button {
+  padding: 6px 16px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.info-display button:hover {
+  background-color: var(--hover-color);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* 编辑表单的按钮组 */
+.edit-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.edit-buttons button {
+  flex: 1;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-buttons button:first-child {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.edit-buttons button:last-child {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.edit-buttons button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* 热力图区域 */
+.study-heatmap {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.study-heatmap h3 {
+  font-size: 1.1rem;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.heatmap-container {
+  padding: 0;
+  width: 100%;
+  transform: scale(0.85);  /* 缩小热力图 */
+  transform-origin: center center;
+  margin: -1rem 0;  /* 补偿缩放造成的空间 */
+}
+
+/* 自定义热力图样式 */
+.react-calendar-heatmap {
+  width: 100%;
+}
+
+.react-calendar-heatmap rect {
+  rx: 2;  /* 圆角方块 */
+  width: 7px;  /* 减小方块大小 */
+  height: 7px;
+}
+
+/* 月份之间的间距 */
+.react-calendar-heatmap .month-group {
+  margin-right: 8px;
+}
+
+/* 月份标签样式 */
+.react-calendar-heatmap text {
+  font-size: 8px;
+  fill: #999;
+  transform: translateY(-4px);
+} 

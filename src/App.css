@@ -1,0 +1,249 @@
+:root {
+  --primary-color: #FFD1DC;  /* 浅粉色 */
+  --secondary-color: #E8F4F8;  /* 浅蓝色 */
+  --accent-color: #B5EAD7;  /* 浅绿色 */
+  --text-color: #4A4A4A;
+  --background-color: #FFFFFF;
+  --hover-color: #FFE5E5;
+}
+
+.App {
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* 导航栏样式 */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--primary-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-left h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-color);
+}
+
+.nav-center {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+/* 导航项样式 */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;  /* 稍微增加内边距 */
+  color: var(--text-color);
+  text-decoration: none;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;  /* 增大字体 */
+  position: relative;  /* 为底部边框做准备 */
+}
+
+.nav-item .nav-icon {
+  font-size: 1.35rem;  /* 图标也相应增大 */
+}
+
+/* 鼠标悬停效果 */
+.nav-item:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  color: var(--text-color);
+  transform: translateY(-1px);
+}
+
+/* 激活状态 */
+.nav-item.active {
+  background-color: #ffe4e9;  /* 更浅的粉色背景 */
+  color: #333;  /* 深色文字 */
+  font-weight: 600;  /* 加粗文字 */
+  border-bottom: 3px solid #ffb6c1;  /* 底部加深粉色边框 */
+}
+
+/* 激活状态的图标也加深颜色 */
+.nav-item.active .nav-icon {
+  color: #333;
+}
+
+.nav-right {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.login-btn, .theme-toggle {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* 主要内容区域样式 */
+.main-content {
+  display: grid;
+  grid-template-columns: 250px 1fr 300px;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* 左侧过滤器样式 */
+.filters {
+  background-color: var(--secondary-color);
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.filter-section {
+  margin-bottom: 1.5rem;
+}
+
+.filter-section label {
+  display: block;
+  margin: 0.5rem 0;
+}
+
+/* 分类按钮样式 */
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.category-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 20px;
+  background-color: var(--accent-color);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.category-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* 题目列表样式 */
+.problems-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.problem-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.problem-tags {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tag {
+  padding: 0.25rem 0.5rem;
+  background-color: var(--secondary-color);
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.difficulty {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.difficulty.easy {
+  background-color: var(--accent-color);
+}
+
+/* 右侧边栏样式 */
+.sidebar {
+  background-color: var(--secondary-color);
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.hot-problems ul {
+  list-style: none;
+  padding: 0;
+}
+
+.hot-problems li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+/* 深色模式 */
+.dark-mode {
+  --primary-color: #2C3E50;
+  --secondary-color: #34495E;
+  --accent-color: #3498DB;
+  --text-color: #ECF0F1;
+  --background-color: #1A1A1A;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  font-size: 1.5rem;
+  color: var(--text-color);
+}
+
+.login-btn {
+  background-color: white;
+  color: var(--text-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+  background-color: var(--hover-color);
+} 
