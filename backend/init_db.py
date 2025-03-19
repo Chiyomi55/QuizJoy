@@ -17,15 +17,18 @@ logger = logging.getLogger(__name__)
 def init_db():
     try:
         app = create_app()
-    with app.app_context():
-            # 创建所有表
-        db.create_all()
-
+        with app.app_context():
+            # 删除所有现有数据
+            print("正在清理现有数据...")
+            db.drop_all()
+            db.create_all()
+            print("数据库表已重新创建")
+            
             # 添加测试用户
             test_user = User(
                 username='test_student',
                 email='test_student@example.com',
-            role='student'
+                role='student'
             )
             test_user.set_password('password123')
             
@@ -38,26 +41,37 @@ def init_db():
             
             db.session.add(test_user)
             db.session.add(test_teacher)
+            print("已添加测试用户")
             
             # 导入题目数据
             problems = load_problems()
             for problem_data in problems:
+                # 删除id字段，让数据库自动生成
+                if 'id' in problem_data:
+                    del problem_data['id']
                 problem = Problem(**problem_data)
-            db.session.add(problem)
-
+                db.session.add(problem)
+            print(f"已加载 {len(problems)} 道题目")
+            
             # 导入测试数据
             tests = load_tests()
             for test_data in tests:
+                # 删除id字段，让数据库自动生成
+                if 'id' in test_data:
+                    del test_data['id']
                 test = Test(**test_data)
                 db.session.add(test)
+            print(f"已加载 {len(tests)} 份测试")
             
-        db.session.commit()
-            print("Database initialized successfully!")
-            print(f"Imported {len(problems)} problems and {len(tests)} tests")
+            db.session.commit()
+            print("数据库初始化成功！")
             
     except Exception as e:
-        print(f"Error initializing database: {e}")
-        db.session.rollback()
+        print(f"初始化数据库时出错: {e}")
+        try:
+            db.session.rollback()
+        except:
+            print("回滚失败，但这不影响数据库的重新初始化")
 
 def load_problems():
     problem_types = ['multiple_choice', 'fill_blank', 'solution']
@@ -114,6 +128,9 @@ def load_tests():
                 test_list = data
                 
             for test_data in test_list:
+                # 删除id字段，让数据库自动生成
+                if 'id' in test_data:
+                    del test_data['id']
                 # 处理topics，确保是逗号分隔的字符串
                 if 'topics' in test_data and isinstance(test_data['topics'], list):
                     test_data['topics'] = ','.join(test_data['topics'])

@@ -18,20 +18,13 @@ function ProblemDetail() {
   useEffect(() => {
     const fetchProblem = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const headers = {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        };
-        
-        // 如果有 token 就带上
-        if (token) {
-          headers['Authorization'] = `Bearer ${token}`;
-        }
-
         const response = await fetch(`http://localhost:5000/api/problems/${problemId}`, {
-          headers: headers,
-          credentials: 'include'  // 添加这个选项以发送 cookies
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          credentials: 'include'
         });
 
         if (!response.ok) {
@@ -86,6 +79,7 @@ function ProblemDetail() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
+        credentials: 'include',
         body: JSON.stringify({ answer: userAnswer })
       });
       

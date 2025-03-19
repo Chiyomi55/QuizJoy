@@ -18,14 +18,14 @@ def get_tests():
         print("请求头:", dict(request.headers))
         print("Authorization头:", request.headers.get('Authorization'))
         
-    user_id = get_jwt_identity()
+        user_id = get_jwt_identity()
         print(f"当前用户ID: {user_id}")
         
         if not user_id:
             print("未找到用户ID")
             return jsonify({'error': '未找到用户信息'}), 401
         
-    tests = Test.query.all()
+        tests = Test.query.all()
         print(f"从数据库查询到 {len(tests)} 个测试")
         
         if not tests:
@@ -103,7 +103,7 @@ def get_test_detail(id):
         if not user_id:
             return jsonify({'error': '未找到用户信息'}), 401
             
-    test = Test.query.get_or_404(id)
+        test = Test.query.get_or_404(id)
         problem_ids = [int(pid) for pid in test.problem_ids.split(',')]
         problems = Problem.query.filter(Problem.id.in_(problem_ids)).all()
         
@@ -111,16 +111,16 @@ def get_test_detail(id):
         problems_dict = {p.id: p for p in problems}
         ordered_problems = [problems_dict[pid] for pid in problem_ids]
     
-    return jsonify({
+        return jsonify({
             'test_info': {
-        'id': test.id,
-        'title': test.title,
+                'id': test.id,
+                'title': test.title,
                 'description': test.description,
-        'type': test.type,
+                'type': test.type,
                 'total_questions': test.total_questions,
                 'estimated_time': test.estimated_time,
                 'topics': test.topics.split(',') if test.topics else [],
-        'difficulty': test.difficulty,
+                'difficulty': test.difficulty,
                 'created_at': test.created_at.isoformat() if test.created_at else None,
                 'deadline': test.deadline.isoformat() if test.deadline else None
             },
@@ -142,9 +142,9 @@ def get_test_detail(id):
 def submit_test(id):
     """提交测试答案"""
     try:
-    user_id = get_jwt_identity()
-    data = request.get_json()
-    
+        user_id = get_jwt_identity()
+        data = request.get_json()
+        
         if not data or 'answers' not in data:
             return jsonify({'error': 'No answers provided'}), 400
             
@@ -163,16 +163,16 @@ def submit_test(id):
         score = (correct_count / total_questions) * 100
         
         # 保存提交记录
-    submission = TestSubmission(
-        test_id=id,
-        user_id=user_id,
+        submission = TestSubmission(
+            test_id=id,
+            user_id=user_id,
             score=score,
             answers=json.dumps(data['answers']),
             duration=data.get('duration', 0)  # 添加做题时长
-    )
-    db.session.add(submission)
-    db.session.commit()
-    
+        )
+        db.session.add(submission)
+        db.session.commit()
+        
         return jsonify({
             'score': score,
             'correct_count': correct_count,

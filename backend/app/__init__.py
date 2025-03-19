@@ -15,7 +15,14 @@ def create_app():
     app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # 请更改为安全的密钥
     
     # 初始化扩展
-    CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": ["http://localhost:3000"],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"],
+            "supports_credentials": True
+        }
+    })
     db.init_app(app)
     jwt.init_app(app)
     

@@ -59,16 +59,23 @@ def get_problems():
         print(traceback.format_exc())
         return jsonify({'error': str(e)}), 500
 
-@bp.route('/<int:id>', methods=['GET'])
-def get_problem(id):
-    """
-    获取单个题目详情
-    - 根据题目ID获取完整题目信息
-    - 包含题目内容、选项、难度等详细信息
-    - 不需要JWT认证，因为题目预览不需要登录
-    """
-    problem = Problem.query.get_or_404(id)
-    return jsonify(problem.to_dict(include_answer=False))
+@bp.route('/<int:problem_id>', methods=['GET'])
+def get_problem(problem_id):
+    """获取单个题目的详细信息"""
+    try:
+        problem = Problem.query.get_or_404(problem_id)
+        return jsonify({
+            'id': problem.id,
+            'title': problem.title,
+            'content': problem.content,
+            'type': problem.type,
+            'options': json.loads(problem.options) if problem.options else [],  # 解析JSON字符串
+            'topics': problem.topics.split(',') if problem.topics else [],
+            'difficulty': problem.difficulty
+        })
+    except Exception as e:
+        print(f"Error fetching problem: {e}")
+        return jsonify({'error': str(e)}), 500
 
 @bp.route('/', methods=['POST'])
 def create_problem():
@@ -128,15 +135,12 @@ def submit_answer(id):
             status = UserProblemStatus(
                 user_id=user_id,
                 problem_id=id,
-                submit_count=0,
-                time_spent=0
+                status='正确' if is_correct else '错误'
             )
             db.session.add(status)
-        
-        status.status = '正确' if is_correct else '错误'
-        status.submit_count = (status.submit_count or 0) + 1
-        status.last_submit_time = datetime.utcnow()
-        status.last_answer = answer
+        else:
+            status.status = '正确' if is_correct else '错误'
+            status.submitted_at = datetime.utcnow()
         
         # 更新每日提交记录
         today = datetime.now().date()
@@ -149,11 +153,11 @@ def submit_answer(id):
             daily_submission = DailyUserSubmission(
                 user_id=user_id,
                 submission_date=today,
-                submission_count=1
+                count=1
             )
             db.session.add(daily_submission)
         else:
-            daily_submission.submission_count += 1
+            daily_submission.count += 1
         
         db.session.commit()
         print(f"Status and daily submission updated successfully")
