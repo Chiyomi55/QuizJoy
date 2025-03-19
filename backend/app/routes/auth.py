@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.models.user import User
-from app import db
+from app.models import db, User
 from flask_jwt_extended import create_access_token, JWTManager, jwt_required, get_jwt_identity
 
 # 创建认证蓝图,设置URL前缀
@@ -23,11 +22,11 @@ def login():
         data = request.get_json()
         username = data.get('username')
         password = data.get('password')
-        login_role = data.get('role')
+        role = data.get('role', 'student')
 
-        print(f"Login attempt - username: {username}, role: {login_role}")  # 调试日志
+        print(f"Login attempt - username: {username}, role: {role}")  # 调试日志
 
-        if not username or not password or not login_role:
+        if not username or not password or not role:
             return jsonify({"error": "Missing username, password or role"}), 400
 
         user = User.query.filter_by(username=username).first()
@@ -38,7 +37,7 @@ def login():
         if not user.check_password(password):
             return jsonify({"error": "密码错误"}), 401
             
-        if user.role != login_role:
+        if user.role != role:
             return jsonify({"error": "账号与所选角色不匹配"}), 401
             
         # 创建 token

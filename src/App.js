@@ -12,6 +12,7 @@ import TeacherProfile from './components/TeacherProfile';
 import TeacherTestBank from './components/TeacherTestBank';
 import CreateTest from './components/CreateTest';
 import TestAnalysis from './components/TestAnalysis';
+import TestResult from './components/TestResult';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -29,7 +30,8 @@ function App() {
           const response = await fetch('http://localhost:5000/api/auth/verify', {
             headers: {
               'Authorization': `Bearer ${token}`
-            }
+            },
+            credentials: 'include'
           });
           
           if (response.ok) {
@@ -171,10 +173,8 @@ function App() {
 
         <Routes>
           <Route path="/" element={renderMainContent()} />
-          <Route 
-            path="/test/:testId" 
-            element={<TestPaper setCurrentPage={setCurrentPage} />} 
-          />
+          <Route path="/test/:testId" element={<TestPaper setCurrentPage={setCurrentPage} />} />
+          <Route path="/testresult/:testId" element={<TestResult />} />
           <Route path="/problem/:problemId" element={<ProblemDetail />} />
           <Route 
             path="/teacher/create-test" 

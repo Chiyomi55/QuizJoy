@@ -1,0 +1,257 @@
+{
+    "type": "填空题",
+    "problems": [
+        {
+            "title": "正弦函数周期性",
+            "content": "函数f(x)=2sin(πx+π/6)的周期是多少？",
+            "type": "填空题",
+            "difficulty": 2,
+            "topics": "三角函数,周期性",
+            "correct_answer": "2",
+            "explanation": "正弦函数y=sin(ax+b)的周期为2π/|a|，此处a=π，所以周期为2"
+        },
+        {
+            "title": "数列极限计算",
+            "content": "求数列an=n/(n²+1)的极限",
+            "type": "填空题",
+            "difficulty": 4,
+            "topics": "数列,极限",
+            "correct_answer": "0",
+            "explanation": "分子分母同除n²，得到1/n/(1+1/n²)，当n→∞时，1/n→0，所以极限为0"
+        },
+        {
+            "title": "向量基础运算",
+            "content": "若向量a=(1,2),b=(0,1),则|2a-b|=?",
+            "type": "填空题",
+            "difficulty": 2,
+            "topics": "向量",
+            "correct_answer": "3",
+            "explanation": "2a-b=(2,4)-(0,1)=(2,3)，向量模长=√(2²+3²)=√13=3"
+        },
+        {
+            "title": "复数运算",
+            "content": "若复数z满足|z+1|+|z-1|=4，则|z|的最小值为？",
+            "type": "填空题",
+            "difficulty": 5,
+            "topics": "复数,不等式",
+            "correct_answer": "√3",
+            "explanation": "根据复数几何意义，|z+1|+|z-1|=4表示z到点1和-1的距离之和为4，这构成一个椭圆。|z|表示z到原点的距离，最小值在椭圆上的最近点处取得，为√3"
+        },
+        {
+            "title": "空间向量垂直性",
+            "content": "已知向量a=(1,1,1), b=(2,-1,k), 若a⊥b，求k的值。",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "空间向量,垂直",
+            "correct_answer": "-1",
+            "explanation": "向量垂直时，内积为0。即1×2+1×(-1)+1×k=0，解得k=-1"
+        },
+        {
+            "title": "数列通项公式",
+            "content": "数列{an}满足a₁=1，an+1=an+2n，求an的通项公式。",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "数列,通项",
+            "correct_answer": "n²",
+            "explanation": "an+1-an=2n，说明相邻项差构成等差数列，通过求和得到an=n²"
+        },
+        {
+            "title": "三角函数方程",
+            "content": "解方程：sin²x + sin x - 2 = 0（在区间[0,2π]内）",
+            "type": "填空题",
+            "difficulty": 4,
+            "topics": "三角函数,方程",
+            "correct_answer": "π",
+            "explanation": "令t=sin x，则t²+t-2=0，解得t=-2或t=1\n在[0,2π]内，sin x=1时，x=π/2；sin x=-2无解\n所以x=π"
+        },
+        {
+            "title": "复数运算进阶",
+            "content": "若复数z满足|z|=1且arg(z)=π/3，则z³的实部等于多少？",
+            "type": "填空题",
+            "difficulty": 5,
+            "topics": "复数",
+            "correct_answer": "-1",
+            "explanation": "z=cos(π/3)+isin(π/3)，z³=cos(π)+isin(π)=-1+0i，所以实部为-1"
+        },
+        {
+            "title": "导数应用最值",
+            "content": "函数f(x)=x³-3x²在[0,3]上的最大值是多少？",
+            "type": "填空题",
+            "difficulty": 4,
+            "topics": "导数,最值",
+            "correct_answer": "0",
+            "explanation": "f'(x)=3x²-6x=3x(x-2)，驻点x=0,2，代入端点和驻点比较得最大值为0"
+        },
+        {
+            "title": "立体几何计算",
+            "content": "正四面体的体积为1，则其棱长为多少？",
+            "type": "填空题",
+            "difficulty": 4,
+            "topics": "立体几何",
+            "correct_answer": "2",
+            "explanation": "正四面体体积V=(a³)/(6√2)，其中a为棱长。代入V=1解得a=2"
+        },
+        {
+            "title": "数列求和",
+            "content": "求和：1+1/2+1/3+...+1/10 （结果保留三位小数）",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "数列,求和",
+            "correct_answer": "2.929",
+            "explanation": "这是调和级数的前10项和，通过计算器可得结果约为2.929"
+        },
+        {
+            "title": "概率计算",
+            "content": "从1到10中随机选择两个不同的数，这两个数都是奇数的概率是多少？",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "概率统计",
+            "correct_answer": "0.2",
+            "explanation": "1到10中有5个奇数，从中选择2个的方法数为C(5,2)=10，总的选择方法数为C(10,2)=45，所以概率为10/45=2/9≈0.2"
+        },
+        {
+            "title": "函数极值",
+            "content": "函数f(x)=|x²-1|在区间[-2,2]上的最小值是多少？",
+            "type": "填空题",
+            "difficulty": 4,
+            "topics": "函数,最值",
+            "correct_answer": "0",
+            "explanation": "当x=±1时，f(x)=0，这是函数的最小值"
+        },
+        {
+            "title": "圆锥曲线焦点",
+            "content": "抛物线y²=4x的焦点坐标是什么？",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "圆锥曲线",
+            "correct_answer": "(1,0)",
+            "explanation": "标准方程y²=4px中，p=1，所以焦点坐标为(p,0)=(1,0)"
+        },
+        {
+            "title": "三角函数值",
+            "content": "计算tan(π/12)的值。",
+            "type": "填空题",
+            "difficulty": 5,
+            "topics": "三角函数",
+            "correct_answer": "2-√3",
+            "explanation": "利用半角公式和特殊角的值可以推导出tan(π/12)=2-√3"
+        },
+        {
+            "title": "空间向量夹角",
+            "content": "已知向量a=(1,1,1),b=(1,0,1)，求它们的夹角（用度数表示）。",
+            "type": "填空题",
+            "difficulty": 4,
+            "topics": "空间向量",
+            "correct_answer": "30",
+            "explanation": "cos θ=(a·b)/(|a|·|b|)=2/(√3·√2)=√(2/3)，所以θ=30°"
+        },
+        {
+            "title": "微分方程",
+            "content": "求微分方程y'+y=0的通解。",
+            "type": "填空题",
+            "difficulty": 4,
+            "topics": "微分方程",
+            "correct_answer": "Ce^(-x)",
+            "explanation": "这是一阶线性微分方程，通解形式为y=Ce^(-x)，其中C为任意常数"
+        },
+        {
+            "title": "几何计算",
+            "content": "正六边形的内角和是多少度？",
+            "type": "填空题",
+            "difficulty": 2,
+            "topics": "几何",
+            "correct_answer": "720",
+            "explanation": "n边形的内角和为(n-2)×180°，代入n=6得720°"
+        },
+        {
+            "title": "三角函数基本值",
+            "content": "cos(π/3)的值等于多少？",
+            "type": "填空题",
+            "difficulty": 2,
+            "topics": "三角函数",
+            "correct_answer": "0.5",
+            "explanation": "cos(π/3)=1/2=0.5，这是三角函数的基本值"
+        },
+        {
+            "title": "导数计算基础",
+            "content": "函数f(x)=x³的导数f'(x)=?",
+            "type": "填空题",
+            "difficulty": 2,
+            "topics": "导数",
+            "correct_answer": "3x²",
+            "explanation": "幂函数求导，指数降一次幂并乘以原指数"
+        },
+        {
+            "title": "概率计算",
+            "content": "一个骰子投两次，点数之和为7的概率是多少？（用分数表示）",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "概率统计",
+            "correct_answer": "1/6",
+            "explanation": "总共36种可能，和为7的有6种情况，概率为6/36=1/6"
+        },
+        {
+            "title": "立体几何体积",
+            "content": "边长为2的正方体的体积是多少？",
+            "type": "填空题",
+            "difficulty": 2,
+            "topics": "立体几何",
+            "correct_answer": "8",
+            "explanation": "正方体体积=边长的三次方=2³=8"
+        },
+        {
+            "title": "复数运算",
+            "content": "(1+i)²的实部等于多少？",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "复数",
+            "correct_answer": "0",
+            "explanation": "(1+i)²=1-1+2i，实部为0"
+        },
+        {
+            "title": "向量模长",
+            "content": "向量(3,4)的模长等于多少？",
+            "type": "填空题",
+            "difficulty": 2,
+            "topics": "向量",
+            "correct_answer": "5",
+            "explanation": "√(3²+4²)=5"
+        },
+        {
+            "title": "函数零点",
+            "content": "函数f(x)=x²-4的零点有哪些？（用集合表示）",
+            "type": "填空题",
+            "difficulty": 2,
+            "topics": "函数",
+            "correct_answer": "{-2,2}",
+            "explanation": "解方程x²-4=0，得x=±2"
+        },
+        {
+            "title": "三角函数方程",
+            "content": "方程sin x=1在[0,2π]内的解是多少？（用π表示）",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "三角函数",
+            "correct_answer": "π/2",
+            "explanation": "sin x=1只在π/2处取到最大值1"
+        },
+        {
+            "title": "空间向量运算",
+            "content": "向量(1,1,1)的模长等于多少？",
+            "type": "填空题",
+            "difficulty": 2,
+            "topics": "空间向量",
+            "correct_answer": "√3",
+            "explanation": "√(1²+1²+1²)=√3"
+        },
+        {
+            "title": "数列求和",
+            "content": "等差数列前5项和为15，首项为1，求公差。",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "数列",
+            "correct_answer": "1",
+            "explanation": "Sn=n(a1+an)/2=5(1+a5)/2=15，解得a5=5，所以公差为1"
+        }
+    ]
+} 

@@ -4,9 +4,11 @@ import os
 import json
 from app.models.user import User
 from app.models.study_record import StudyRecord, StudyStatistics, UserKnowledgeStatus
+from app.models.problem import DailyUserSubmission, Problem, UserProblemStatus
 from app import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from datetime import datetime
+from datetime import datetime, timedelta
+from sqlalchemy import func
 
 bp = Blueprint('profile', __name__, url_prefix='/api/profile')
 
@@ -131,4 +133,124 @@ def get_statistics():
         'total_problems': stats.total_problems,
         'correct_problems': stats.correct_problems,
         'streak_days': stats.streak_days
-    }) 
+    })
+
+@bp.route('/activity', methods=['GET'])
+@jwt_required()
+def get_activity():
+    """获取用户的做题活动记录"""
+    user_id = get_jwt_identity()
+    end_date = datetime.now().date()
+    start_date = end_date - timedelta(days=180)
+    
+    # 获取用户在时间范围内的每日提交记录
+    submissions = DailyUserSubmission.query.filter(
+        DailyUserSubmission.user_id == user_id,
+        DailyUserSubmission.submission_date >= start_date,
+        DailyUserSubmission.submission_date <= end_date
+    ).all()
+    
+    # 转换为前端需要的格式
+    activity_data = [submission.to_dict() for submission in submissions]
+    
+    return jsonify(activity_data)
+
+@bp.route('/knowledge_status', methods=['GET'])
+@jwt_required()
+def get_knowledge_status():
+    """获取用户知识点掌握度数据"""
+    try:
+        user_id = get_jwt_identity()
+        print(f"Getting knowledge status for user {user_id}")
+        
+        # 获取用户所有做题记录
+        problem_statuses = UserProblemStatus.query.filter_by(user_id=user_id).all()
+        print(f"Found {len(problem_statuses)} problem statuses")
+        
+        # 统计每个知识点的正确率
+        knowledge_stats = {}
+        for status in problem_statuses:
+            problem = Problem.query.get(status.problem_id)
+            if not problem or not problem.topics:
+                continue
+                
+            topics = problem.topics.split(',')
+            for topic in topics:
+                topic = topic.strip()  # 去除可能的空格
+                if not topic:  # 跳过空字符串
+                    continue
+                    
+                if topic not in knowledge_stats:
+                    knowledge_stats[topic] = {'correct': 0, 'total': 0}
+                
+                knowledge_stats[topic]['total'] += 1
+                if status.status == '正确':
+                    knowledge_stats[topic]['correct'] += 1
+        
+        print(f"Knowledge stats: {knowledge_stats}")
+        
+        # 计算掌握度
+        result = []
+        for topic, stats in knowledge_stats.items():
+            mastery = (stats['correct'] / stats['total']) * 100 if stats['total'] > 0 else 0
+            result.append({
+                'topic': topic,
+                'mastery': round(mastery, 2)
+            })
+        
+        print(f"Returning result: {result}")
+        return jsonify(result)
+        
+    except Exception as e:
+        print(f"Error in get_knowledge_status: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@bp.route('/difficulty_distribution', methods=['GET'])
+@jwt_required()
+def get_difficulty_distribution():
+    """获取用户不同难度题目的完成情况"""
+    try:
+        user_id = get_jwt_identity()
+        print(f"Getting difficulty distribution for user {user_id}")
+        
+        # 获取用户所有做题记录
+        problem_statuses = UserProblemStatus.query.filter_by(user_id=user_id).all()
+        print(f"Found {len(problem_statuses)} problem statuses")
+        
+        # 统计每个难度的完成情况
+        difficulty_stats = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+        total_problems = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+        
+        for status in problem_statuses:
+            problem = Problem.query.get(status.problem_id)
+            if not problem:
+                continue
+                
+            difficulty = problem.difficulty
+            if difficulty not in difficulty_stats:  # 确保难度值在有效范围内
+                continue
+                
+            total_problems[difficulty] += 1
+            if status.status == '正确':
+                difficulty_stats[difficulty] += 1
+        
+        print(f"Difficulty stats: {difficulty_stats}")
+        print(f"Total problems: {total_problems}")
+        
+        # 计算完成率
+        result = []
+        for difficulty in range(1, 6):
+            completion_rate = (difficulty_stats[difficulty] / total_problems[difficulty] * 100) if total_problems[difficulty] > 0 else 0
+            result.append({
+                'difficulty': difficulty,
+                'completed': difficulty_stats[difficulty],
+                'total': total_problems[difficulty],
+                'completion_rate': round(completion_rate, 2)
+            })
+        
+        print(f"Returning result: {result}")
+        return jsonify(result)
+        
+    except Exception as e:
+        print(f"Error in get_difficulty_distribution: {str(e)}")
+        return jsonify({'error': str(e)}), 500 

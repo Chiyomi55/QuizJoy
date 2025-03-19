@@ -134,25 +134,39 @@
 }
 
 /* 选项样式 */
-.options-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.ant-radio-group {
+  width: 100%;
 }
 
-.option-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.ant-radio-wrapper {
+  width: 100%;
+  margin: 8px 0 !important;
+  padding: 12px 16px !important;
+  border: 1px solid #F2A6A6 !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
 }
 
-.option-item:hover {
-  background: #f0f2f5;
+.ant-radio-wrapper:hover {
+  background: #FDF6F6 !important;
+}
+
+.ant-radio-wrapper-checked {
+  background: #F2A6A6 !important;
+  border-color: #F2A6A6 !important;
+}
+
+.ant-radio-wrapper-checked .ant-radio-inner {
+  border-color: white !important;
+  background-color: white !important;
+}
+
+.ant-radio-wrapper-checked .ant-radio-inner::after {
+  background-color: #F2A6A6 !important;
+}
+
+.ant-radio-wrapper-checked span {
+  color: white !important;
 }
 
 /* 填空题样式 */
@@ -342,4 +356,158 @@
 
 .confirm-btn.submit:hover {
   background: #4CAF50;
+}
+
+.test-paper-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.test-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.test-header h2 {
+    margin: 0;
+}
+
+.problem-content {
+    margin: 20px 0;
+}
+
+.problem-content h4 {
+    margin-bottom: 20px;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.navigation-buttons .ant-btn {
+    min-width: 120px;
+}
+
+.ant-input-group-wrapper {
+    width: 100%;
+}
+
+.ant-radio-group {
+    width: 100%;
+}
+
+.ant-radio-wrapper {
+    margin: 8px 0;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.ant-radio-wrapper:hover {
+    background-color: #FDF6F6;
+}
+
+.ant-progress-text {
+    color: #F2A6A6 !important;
+}
+
+.ant-card {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 提交按钮样式 */
+.submit-button {
+    margin-top: 24px;
+    width: 100%;
+}
+
+/* 加载状态样式 */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+}
+
+/* 错误提示样式 */
+.error-message {
+    text-align: center;
+    color: #ff4d4f;
+    margin: 16px 0;
+}
+
+/* 题目导航按钮状态样式 */
+.problem-navigation .ant-btn-primary {
+    background-color: #F2A6A6 !important;
+    border-color: #F2A6A6 !important;
+    color: white !important;
+    min-width: 100px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.problem-navigation .ant-btn-primary:hover {
+    background-color: #F7D1D1 !important;
+    border-color: #F7D1D1 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(242, 166, 166, 0.3);
+}
+
+.problem-navigation .ant-btn-primary:disabled {
+    background-color: #f5f5f5 !important;
+    border-color: #d9d9d9 !important;
+    color: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* 提交按钮样式 */
+.navigation-buttons .submit-button {
+    background-color: #A5C9C4 !important;
+    border-color: #A5C9C4 !important;
+    color: white !important;
+}
+
+.navigation-buttons .submit-button:hover {
+    background-color: #B5D4D0 !important;
+    border-color: #B5D4D0 !important;
+    box-shadow: 0 2px 8px rgba(165, 201, 196, 0.3);
+}
+
+/* 选项按钮样式 */
+.option-button {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 12px;
+    border-color: #F2A6A6;
+    color: #F2A6A6;
+    transition: all 0.3s ease;
+}
+
+.option-button:hover {
+    background-color: #F7D1D1;
+    border-color: #F2A6A6;
+    color: #F2A6A6;
+}
+
+.option-button.selected {
+    background-color: #F2A6A6;
+    border-color: #F2A6A6;
+    color: white;
+}
+
+/* 问题容器样式 */
+.problem-container {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 } 

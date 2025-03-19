@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './ProblemDetail.css';
 import { FaArrowLeft, FaCheck, FaTimes } from 'react-icons/fa';
 import { fetchWithAuth } from '../utils/api';
+import MathSymbolKeyboard from './MathSymbolKeyboard';
+import { Space } from 'antd';
 
 function ProblemDetail() {
   const { problemId } = useParams();
@@ -22,25 +24,27 @@ function ProblemDetail() {
           'Accept': 'application/json'
         };
         
-        // 如果有 token 就带上，没有也可以请求
+        // 如果有 token 就带上
         if (token) {
           headers['Authorization'] = `Bearer ${token}`;
         }
 
         const response = await fetch(`http://localhost:5000/api/problems/${problemId}`, {
-          headers: headers
+          headers: headers,
+          credentials: 'include'  // 添加这个选项以发送 cookies
         });
 
         if (!response.ok) {
-          throw new Error('Failed to load problem');
+          const errorData = await response.json();
+          throw new Error(errorData.message || '获取题目失败');
         }
 
         const data = await response.json();
         setProblem(data);
         setLoading(false);
       } catch (err) {
-        console.error('Failed to fetch problem:', err);
-        setError('Failed to load problem');
+        console.error('获取题目详情失败:', err);
+        setError(err.message || '获取题目失败，请稍后重试');
         setLoading(false);
       }
     };
@@ -115,9 +119,13 @@ function ProblemDetail() {
     setUserAnswer('');
   };
 
-  if (loading) return <div className="loading">Loading...</div>;
+  const handleSymbolSelect = (symbol) => {
+    setUserAnswer(prev => prev + symbol);
+  };
+
+  if (loading) return <div className="loading">加载中...</div>;
   if (error) return <div className="error">{error}</div>;
-  if (!problem) return <div className="error">Problem not found</div>;
+  if (!problem) return <div className="error">未找到题目</div>;
 
   return (
     <div className="problem-detail">
@@ -151,22 +159,30 @@ function ProblemDetail() {
                   ))
                 )}
                 {problem.type === '填空题' && (
-                  <input
-                    type="text"
-                    value={userAnswer}
-                    onChange={(e) => setUserAnswer(e.target.value)}
-                    placeholder="请输入答案"
-                    className="fill-blank-input"
-                  />
+                  <Space.Compact style={{ width: '100%' }}>
+                    <input
+                      type="text"
+                      value={userAnswer}
+                      onChange={(e) => setUserAnswer(e.target.value)}
+                      placeholder="请输入答案"
+                      className="fill-blank-input"
+                    />
+                    <MathSymbolKeyboard onSymbolSelect={handleSymbolSelect} />
+                  </Space.Compact>
                 )}
                 {problem.type === '解答题' && (
-                  <textarea
-                    value={userAnswer}
-                    onChange={(e) => setUserAnswer(e.target.value)}
-                    placeholder="请输入解答过程"
-                    className="solution-textarea"
-                    rows={6}
-                  />
+                  <div style={{ width: '100%' }}>
+                    <textarea
+                      value={userAnswer}
+                      onChange={(e) => setUserAnswer(e.target.value)}
+                      placeholder="请输入解答过程"
+                      className="solution-textarea"
+                      rows={6}
+                    />
+                    <div style={{ marginTop: '8px' }}>
+                      <MathSymbolKeyboard onSymbolSelect={handleSymbolSelect} />
+                    </div>
+                  </div>
                 )}
               </div>
               <button 

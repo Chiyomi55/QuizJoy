@@ -16,10 +16,18 @@ function LoginModal({ isOpen, onClose, onLogin }) {
     setError('');
     
     try {
+      console.log('开始登录请求...');
+      console.log('请求数据:', {
+        username: formData.username,
+        password: formData.password,
+        role: userType
+      });
+
       const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
           username: formData.username,
@@ -29,19 +37,27 @@ function LoginModal({ isOpen, onClose, onLogin }) {
         credentials: 'include'
       });
 
+      console.log('收到响应:', {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries())
+      });
+
       const data = await response.json();
+      console.log('响应数据:', data);
       
       if (!response.ok) {
-        throw new Error(data.error || '登录失败');
+        throw new Error(data.error || data.msg || '登录失败');
       }
       
       localStorage.setItem('token', data.token);
-      console.log('Login successful, user data:', data.user);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      console.log('登录成功，用户数据:', data.user);
       onLogin(data.user);
       onClose();
       
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('登录错误详情:', error);
       setError(error.message || '登录失败，请稍后重试');
     }
   };

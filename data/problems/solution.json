@@ -1,0 +1,104 @@
+{
+    "type": "解答题",
+    "problems": [
+        {
+            "title": "数列求和技巧",
+            "content": "求数列1, 1/2, 1/3, ..., 1/n的前n项和的渐近表达式",
+            "type": "解答题",
+            "difficulty": 4,
+            "topics": "数列,求和",
+            "correct_answer": "ln(n) + γ + O(1/n)",
+            "explanation": "这是调和级数的求和..."
+        },
+        {
+            "title": "二次函数图像分析",
+            "content": "已知抛物线y=ax²+bx+c(a≠0)与x轴交点为(-1,0)和(2,0)，顶点的y坐标为-3，求该二次函数的解析式。",
+            "type": "解答题",
+            "difficulty": 4,
+            "topics": "二次函数,解析几何",
+            "correct_answer": "y=-\\frac{4}{3}x²+\\frac{1}{3}x+2",
+            "explanation": "1. 根据交点坐标，x=-1和x=2是方程ax²+bx+c=0的根\n2. 由韦达定理，-1+2=−\\frac{b}{a}，(-1)(2)=\\frac{c}{a}\n3. 顶点x坐标为−\\frac{b}{2a}，代入得y=-3\n4. 解得a=-\\frac{4}{3},b=\\frac{1}{3},c=2"
+        },
+        {
+            "title": "导数应用",
+            "content": "已知函数f(x)=x³-3x²+2在区间[0,2]上的最大值与最小值之差为k，求k的值。",
+            "type": "解答题",
+            "difficulty": 4,
+            "topics": "导数,最值",
+            "correct_answer": "4",
+            "explanation": "1. f'(x)=3x²-6x=3x(x-2)\n2. 驻点x=0,2\n3. 比较f(0)=2,f(2)=2,f(1)=-2\n4. 最大值2，最小值-2，差值为4"
+        },
+        {
+            "title": "指数函数方程",
+            "content": "解方程：2^(x²-1) = 8^(x-2)",
+            "type": "解答题",
+            "difficulty": 4,
+            "topics": "指数函数,方程",
+            "correct_answer": "x=3",
+            "explanation": "1. 右边8^(x-2)=(2³)^(x-2)=2^(3x-6)\n2. 原方程变为2^(x²-1)=2^(3x-6)\n3. 指数相等，x²-1=3x-6\n4. x²-3x+5=0\n5. 解得x=3"
+        },
+        {
+            "title": "不等式证明",
+            "content": "证明：对于任意正实数a,b，总有√(a²+b²)/2 ≥ √ab",
+            "type": "解答题",
+            "difficulty": 5,
+            "topics": "不等式",
+            "correct_answer": "证明略",
+            "explanation": "1. 等价于(a²+b²)/2 ≥ ab\n2. 即a²-2ab+b² ≥ 0\n3. 即(a-b)² ≥ 0\n4. 显然成立"
+        },
+        {
+            "title": "导数应用优化",
+            "content": "一个长方形的周长固定为20，求其面积的最大值。",
+            "type": "解答题",
+            "difficulty": 3,
+            "topics": "导数,最值",
+            "correct_answer": "25",
+            "explanation": "1. 设长为x，则宽为10-x\n2. 面积函数S=x(10-x)=-x²+10x\n3. S'=-2x+10\n4. 令S'=0解得x=5\n5. 代入得最大面积为25"
+        },
+        {
+            "title": "三角函数证明",
+            "content": "证明：对于任意角度θ，都有sin²θ + cos²θ = 1",
+            "type": "解答题",
+            "difficulty": 4,
+            "topics": "三角函数,证明",
+            "correct_answer": "证明略",
+            "explanation": "1. 在单位圆上取点P(cosθ, sinθ)\n2. 根据点到原点的距离公式\n3. |OP|² = cos²θ + sin²θ\n4. 由于在单位圆上，|OP| = 1\n5. 所以sin²θ + cos²θ = 1"
+        },
+        {
+            "title": "立体几何证明",
+            "content": "证明：正四面体的所有面都是全等的正三角形。",
+            "type": "解答题",
+            "difficulty": 5,
+            "topics": "立体几何,证明",
+            "correct_answer": "证明略",
+            "explanation": "1. 设正四面体的棱长为a\n2. 任取两个面，它们都是以棱长a为边的三角形\n3. 由对称性，所有二面角相等\n4. 因此所有面都是全等的正三角形"
+        },
+        {
+            "title": "数学归纳法",
+            "content": "用数学归纳法证明：对于任意正整数n，3^n > n² + 1成立。",
+            "type": "解答题",
+            "difficulty": 4,
+            "topics": "数学归纳法",
+            "correct_answer": "证明略",
+            "explanation": "1. n=1时，3>2，成立\n2. 假设n=k时成立，即3^k > k² + 1\n3. 当n=k+1时，3^(k+1) = 3×3^k > 3(k² + 1)\n4. 需证明3(k² + 1) > (k+1)² + 1\n5. 整理得k² + 2k - 1 > 0，当k≥1时恒成立"
+        },
+        {
+            "title": "复数运算证明",
+            "content": "设复数z满足|z|=1，证明：对于任意正整数n，|z^n|=1。",
+            "type": "解答题",
+            "difficulty": 4,
+            "topics": "复数",
+            "correct_answer": "证明略",
+            "explanation": "1. 设z=cosθ+isinθ，其中θ为辐角\n2. 则|z|=√(cos²θ+sin²θ)=1\n3. 根据棣莫弗公式\n4. z^n=cos(nθ)+isin(nθ)\n5. 所以|z^n|=√(cos²(nθ)+sin²(nθ))=1"
+        },
+        {
+            "title": "微分方程应用",
+            "content": "求解初值问题：y' = y, y(0) = 1",
+            "type": "解答题",
+            "difficulty": 4,
+            "topics": "微分方程",
+            "correct_answer": "y = e^x",
+            "explanation": "1. 分离变量：dy/y = dx\n2. 两边积分：ln|y| = x + C\n3. 所以y = Ce^x\n4. 代入初值条件y(0) = 1\n5. 得到C = 1，因此y = e^x"
+        }
+    ]
+} 

@@ -1,32 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ProfilePage.css';
 import { BsCamera } from 'react-icons/bs';
-import CalendarHeatmap from 'react-calendar-heatmap';
+import ReactCalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
-import { Line, Bar } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js';
 import { fetchWithAuth } from '../utils/fetchWithAuth';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { Card, Avatar, List, Statistic, Row, Col, Spin, message } from 'antd';
+import { UserOutlined, TrophyOutlined, BookOutlined } from '@ant-design/icons';
+import { Radar, Pie } from '@ant-design/plots';
 
 function ProfilePage({ user, onLogin }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -38,45 +18,71 @@ function ProfilePage({ user, onLogin }) {
     subject: '',
     title: ''
   });
+  const [activityData, setActivityData] = useState([]);
+  const [knowledgeStatus, setKnowledgeStatus] = useState([]);
+  const [difficultyDistribution, setDifficultyDistribution] = useState([]);
   const fileInputRef = useRef(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
+    const fetchAllData = async () => {
       try {
-        console.log('Fetching user info...', user);
+        setLoading(true);
+        setError(null);
         
-        const response = await fetchWithAuth('/api/profile/info');
-        console.log('Profile API response:', response);
-        
-        if (response.ok) {
-          const userData = await response.json();
-          console.log('Fetched user info from backend:', userData);
-          
-          // 确保所有字段都有默认值
+        // 并行获取所有数据
+        const [userInfoResponse, activityResponse, knowledgeResponse, difficultyResponse] = await Promise.all([
+          fetchWithAuth('/api/profile/info'),
+          fetchWithAuth('/api/profile/activity'),
+          fetchWithAuth('/api/profile/knowledge_status'),
+          fetchWithAuth('/api/profile/difficulty_distribution')
+        ]);
+
+        // 处理用户信息
+        if (userInfoResponse.ok) {
+          const userData = await userInfoResponse.json();
           const updatedUserInfo = {
             nickname: userData.nickname || user.nickname || '',
             school: userData.school || '',
-            class: userData.grade || '',  // 后端用 grade，前端用 class
+            class: userData.grade || '',
             subject: userData.subject || '',
             title: userData.title || '',
             achievements: userData.achievements || []
           };
-          
-          console.log('Setting user info to:', updatedUserInfo);
           setUserInfo(updatedUserInfo);
-        } else {
-          console.error('Failed to fetch user info:', response.status);
         }
+
+        // 处理活动数据
+        if (activityResponse.ok) {
+          const activityData = await activityResponse.json();
+          setActivityData(activityData);
+        }
+
+        // 处理知识点状态
+        if (knowledgeResponse.ok) {
+          const knowledgeData = await knowledgeResponse.json();
+          setKnowledgeStatus(knowledgeData);
+        }
+
+        // 处理难度分布
+        if (difficultyResponse.ok) {
+          const difficultyData = await difficultyResponse.json();
+          setDifficultyDistribution(difficultyData);
+        }
+
       } catch (error) {
-        console.error('Error fetching user info:', error);
+        console.error('Error fetching data:', error);
+        setError('数据加载失败，请刷新页面重试');
+      } finally {
+        setLoading(false);
       }
     };
 
     if (user) {
-      console.log('User is available, fetching info...');
-      fetchUserInfo();
+      fetchAllData();
     } else {
-      console.log('No user available');
+      setLoading(false);
     }
   }, [user]);
 
@@ -88,6 +94,26 @@ function ProfilePage({ user, onLogin }) {
         <button className="login-btn" onClick={() => onLogin()}>
           去登录
         </button>
+      </div>
+    );
+  }
+
+  // 如果正在加载，显示加载状态
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  // 如果有错误，显示错误信息
+  if (error) {
+    return (
+      <div style={{ textAlign: 'center', padding: '20px' }}>
+        <h2>出错了</h2>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()}>刷新页面</button>
       </div>
     );
   }
@@ -116,31 +142,6 @@ function ProfilePage({ user, onLogin }) {
       categoryPercentage: 0.8  // 调整类别间距
     }]
   };
-
-  // 生成热力图数据
-  const generateHeatmapData = () => {
-    const values = [];
-    const today = new Date();
-    const startDate = new Date();
-    startDate.setMonth(startDate.getMonth() - 6);
-    startDate.setDate(1);
-    
-    while (startDate <= today) {
-      const isWeekend = startDate.getDay() === 0 || startDate.getDay() === 6;
-      const baseValue = isWeekend ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 4);
-      const streak = Math.random() > 0.8;
-      
-      values.push({
-        date: new Date(startDate).toISOString().split('T')[0],
-        count: streak ? 3 : baseValue
-      });
-      
-      startDate.setDate(startDate.getDate() + 1);
-    }
-    return values;
-  };
-
-  const heatmapValues = generateHeatmapData();
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -195,227 +196,179 @@ function ProfilePage({ user, onLogin }) {
     }
   };
 
+  const getColor = (count) => {
+    if (!count) return '#ebedf0';  // 无数据时的颜色
+    if (count <= 2) return '#F8BBD0';  // 浅粉色
+    if (count <= 4) return '#F48FB1';  // 中浅粉色
+    if (count <= 6) return '#CE93D8';  // 浅紫色
+    if (count <= 8) return '#BA68C8';  // 中紫色
+    return '#8E24AA';  // 深紫色
+  };
+
+  const radarConfig = {
+    data: knowledgeStatus.map(item => ({
+      item: item.topic,
+      score: item.mastery,
+      user: '当前水平'
+    })),
+    xField: 'item',
+    yField: 'score',
+    seriesField: 'user',
+    meta: {
+      score: {
+        alias: '掌握度',
+        min: 0,
+        max: 100,
+      },
+    },
+    xAxis: {
+      line: null,
+      tickLine: null,
+      grid: {
+        line: {
+          style: {
+            lineDash: null,
+          },
+        },
+      },
+    },
+    yAxis: {
+      label: false,
+      grid: {
+        alternateColor: 'rgba(0, 0, 0, 0.04)',
+      },
+    },
+    // 开启辅助点
+    point: {
+      size: 2,
+    },
+    area: {
+      style: {
+        fill: '#F2A6A6',
+        fillOpacity: 0.3,
+      },
+    },
+  };
+
+  const pieConfig = {
+    data: difficultyDistribution,
+    angleField: 'value',
+    colorField: 'type',
+    radius: 0.8,
+    color: ['#E8D4D4', '#F2A6A6', '#A5C9C4', '#D4E2D4', '#ECE3D4'],
+    label: {
+      type: 'spider',
+      content: '{name}\n{percentage}',
+      style: {
+        fontSize: 12,
+        textAlign: 'center',
+      },
+    },
+    legend: {
+      position: 'bottom',
+      itemHeight: 8,
+      itemWidth: 8,
+      marker: {
+        symbol: 'square',
+      },
+    },
+    tooltip: {
+      formatter: (datum) => {
+        return { name: datum.type, value: `${datum.value}题 (${datum.rate}%)` };
+      }
+    },
+  };
+
   return (
     <div className="profile-container">
       <h1 className="profile-title">个人学习档案</h1>
-      <div className="profile-content">
-        {/* 左侧个人信息 */}
-        <aside className="profile-left">
-          <div className="avatar-section">
-            <div className="avatar-container">
-              <img 
-                src="https://file.302.ai/gpt/imgs/20250121/7f0cde4d3b0541598dab4244058bb566.jpeg"
-                alt="用户头像" 
-              />
-              <button 
-                className="upload-btn"
-                onClick={() => fileInputRef.current.click()}
-              >
-                <BsCamera />
-              </button>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleImageUpload}
-                accept="image/png,image/jpeg"
-                style={{ display: 'none' }}
-              />
+      <Row gutter={24}>
+        <Col span={6}>
+          <Card className="profile-card">
+            <div className="profile-header">
+              <Avatar size={100} icon={<UserOutlined />} />
+              <h2>{userInfo.nickname || user.nickname || '未设置昵称'}</h2>
+              <p>{userInfo.school || '未设置学校'} {userInfo.class || '未设置班级'}</p>
             </div>
-          </div>
-          <div className="user-info">
-            {isEditing ? (
-              <div className="edit-form">
-                <input
-                  type="text"
-                  value={userInfo.nickname || user.nickname || ''}
-                  onChange={(e) => setUserInfo({...userInfo, nickname: e.target.value})}
-                  placeholder="昵称"
-                />
-                <input
-                  type="text"
-                  value={userInfo.school || ''}
-                  onChange={(e) => setUserInfo({...userInfo, school: e.target.value})}
-                  placeholder="学校"
-                />
-                {user.role === 'student' ? (
-                  <input
-                    type="text"
-                    value={userInfo.class || ''}
-                    onChange={(e) => setUserInfo({...userInfo, class: e.target.value})}
-                    placeholder="班级"
-                  />
-                ) : (
-                  <>
-                    <input
-                      type="text"
-                      value={userInfo.subject || ''}
-                      onChange={(e) => {
-                        console.log('Updating subject:', e.target.value);
-                        setUserInfo({...userInfo, subject: e.target.value});
-                      }}
-                      placeholder="任教科目"
+            
+            <div className="profile-stats">
+              <Statistic title="总做题数" value={activityData.reduce((sum, item) => sum + item.count, 0)} />
+              <Statistic title="连续做题" value={userInfo.streak_days || 0} suffix="天" />
+            </div>
+
+            <div className="achievements-section">
+              <h3><TrophyOutlined /> 成就</h3>
+              <List
+                dataSource={userInfo.achievements || []}
+                renderItem={item => (
+                  <List.Item>
+                    <List.Item.Meta
+                      title={item}
                     />
-                    <input
-                      type="text"
-                      value={userInfo.title || ''}
-                      onChange={(e) => {
-                        console.log('Updating title:', e.target.value);
-                        setUserInfo({...userInfo, title: e.target.value});
-                      }}
-                      placeholder="职称"
-                    />
-                  </>
+                  </List.Item>
                 )}
-                <div className="edit-buttons">
-                  <button onClick={handleSave}>保存</button>
-                  <button onClick={() => setIsEditing(false)}>取消</button>
-                </div>
-              </div>
-            ) : (
-              <div className="info-display">
-                <h2>{userInfo.nickname || user.nickname || '未设置昵称'}</h2>
-                <p>学校：{userInfo.school || '未设置学校'}</p>
-                {user.role === 'student' ? (
-                  <p>班级：{userInfo.class || '未设置班级'}</p>
-                ) : (
-                  <>
-                    <p>任教科目：{userInfo.subject || '未设置科目'}</p>
-                    <p>职称：{userInfo.title || '未设置职称'}</p>
-                  </>
-                )}
-                <button onClick={() => setIsEditing(true)}>编辑资料</button>
-              </div>
-            )}
-
-            <div className="ranking-display">
-              <h3>班级排名</h3>
-              <div className="ranking">
-                <span className="ranking-number">2</span>
-                <span className="ranking-total">/47</span>
-              </div>
+              />
             </div>
-
-            <div className="achievements">
-              <h3>成就</h3>
-              <div className="achievement-tags">
-                {userInfo.achievements?.map((achievement, index) => (
-                  <span key={index} className="achievement-tag">
-                    {achievement}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        {/* 右侧主要内容区域 */}
-        <main className="profile-main">
-          {/* 上方热力图 */}
-          <div className="study-heatmap">
-            <h3>刷题热力图</h3>
-            <div className="heatmap-container">
-              <CalendarHeatmap
-                values={heatmapValues}
-                classForValue={(value) => {
-                  if (!value) return 'color-empty';
-                  return `color-scale-${value.count}`;
-                }}
-                startDate={(() => {
-                  const date = new Date();
-                  date.setMonth(date.getMonth() - 6);
-                  date.setDate(1);
-                  return date;
-                })()}
+          </Card>
+        </Col>
+        
+        <Col span={18}>
+          <Card className="activity-card" style={{ marginBottom: '16px' }}>
+            <h3>学习热力图</h3>
+            <div className="activity-heatmap">
+              <ReactCalendarHeatmap
+                values={activityData}
+                startDate={new Date(new Date().setDate(new Date().getDate() - 180))}
                 endDate={new Date()}
-                showMonthLabels={true}
-                monthLabelsStyle={{
-                  fontSize: '8px',
-                  color: '#999'
+                classForValue={value => {
+                  if (!value) return 'color-empty';
+                  return `color-scale-${Math.min(Math.floor(value.count / 2), 4)}`;
                 }}
-                gutterSize={2}
-                horizontal={true}
-                monthLabelGutter={8}
-                transformDayElement={(element, value, index) => ({
-                  ...element,
-                  props: {
-                    ...element.props,
-                    rx: 2,
-                    width: '7px',
-                    height: '7px'
-                  }
-                })}
+                titleForValue={value => {
+                  if (!value) return '没有提交';
+                  return `${value.date}: ${value.count} 次提交`;
+                }}
+                tooltipDataAttrs={value => {
+                  if (!value) return { 'data-tip': '没有提交' };
+                  return {
+                    'data-tip': `${value.date}: ${value.count} 次提交`
+                  };
+                }}
+                showWeekdayLabels={false}
+                monthLabels={['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']}
               />
+              <div className="activity-legend">
+                <span>活跃度：</span>
+                <span className="legend-item">低</span>
+                <span className="legend-box scale-1"></span>
+                <span className="legend-box scale-2"></span>
+                <span className="legend-box scale-3"></span>
+                <span className="legend-box scale-4"></span>
+                <span className="legend-item">高</span>
+              </div>
             </div>
-          </div>
+          </Card>
 
-          {/* 下方数据展示区域 */}
-          <div className="data-visualization">
-            {/* 左侧知识点掌握度 */}
-            <section className="knowledge-mastery">
-              <h3>知识点掌握度</h3>
-              <div className="chart-container">
-                <Bar data={knowledgeData} 
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    aspectRatio: 1.5,
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                        max: 100,
-                        grid: {
-                          display: false  // 移除网格线
-                        },
-                        border: {
-                          display: false  // 移除边框
-                        },
-                        ticks: {
-                          padding: 5
-                        }
-                      },
-                      x: {
-                        grid: {
-                          display: false
-                        },
-                        border: {
-                          display: false
-                        },
-                        ticks: {
-                          padding: 5
-                        }
-                      }
-                    },
-                    plugins: {
-                      legend: {
-                        display: false
-                      }
-                    }
-                  }}
-                />
-              </div>
-            </section>
-
-            {/* 右侧成绩趋势 */}
-            <section className="score-trends">
-              <div className="score-chart">
-                <h3>成绩趋势</h3>
-                <Line data={scoreData} 
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    aspectRatio: 1.5,
-                    plugins: {
-                      legend: {
-                        display: false
-                      }
-                    }
-                  }}
-                />
-              </div>
-            </section>
-          </div>
-        </main>
-      </div>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Card className="knowledge-card" bodyStyle={{ height: '300px' }}>
+                <h3>知识点掌握度</h3>
+                <div style={{ height: '250px' }}>
+                  <Radar {...radarConfig} />
+                </div>
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card className="score-card" bodyStyle={{ height: '300px' }}>
+                <h3>难度分布</h3>
+                <div style={{ height: '250px' }}>
+                  <Pie {...pieConfig} />
+                </div>
+              </Card>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
     </div>
   );
 }

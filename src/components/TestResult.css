@@ -1,0 +1,232 @@
+.test-result-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    min-height: 100vh;
+}
+
+/* 得分卡片样式 */
+.score-card {
+    margin-bottom: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.score-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 16px;
+}
+
+.score-circle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    border: 4px solid;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.score-number {
+    font-size: 32px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.score-label {
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-item .ant-typography {
+    margin: 0;
+}
+
+/* 题目详情卡片样式 */
+.problem-detail-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.problem-header {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-tag {
+    margin-left: 12px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+.status-tag.correct {
+    background-color: #A5C9C4 !important;
+    color: white !important;
+    border: none;
+}
+
+.status-tag.wrong {
+    background-color: #E6A6A6 !important;
+    color: white !important;
+    border: none;
+}
+
+.problem-content {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+/* 答案容器样式 */
+.answers-container {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.answer-box {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid #E8CFCF;
+    border-radius: 8px;
+    background: white;
+}
+
+.answer-box .ant-space {
+    width: 100%;
+}
+
+.answer-box .ant-typography {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.answer-box .ant-typography-strong {
+    color: #5C5757;
+    min-width: 80px;
+    margin-right: 8px;
+}
+
+/* 解析部分样式 */
+.explanation-section {
+    margin: 16px 0;
+    padding: 16px;
+    background: #FDF6F6;
+    border-radius: 8px;
+}
+
+/* 导航按钮样式 */
+.navigation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.navigation-buttons .ant-btn {
+    min-width: 120px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.navigation-buttons .ant-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(242, 166, 166, 0.3);
+    opacity: 0.9;
+}
+
+/* 题目导航样式 */
+.problem-navigation {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+    padding: 16px;
+    background: #FDF6F6;
+    border-radius: 8px;
+    justify-content: center;
+}
+
+.nav-button {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-button.correct {
+    background: #A5C9C4 !important;
+    border-color: #A5C9C4 !important;
+    color: white !important;
+}
+
+.nav-button.wrong {
+    background: #E6A6A6 !important;
+    border-color: #E6A6A6 !important;
+    color: white !important;
+}
+
+.nav-button.current {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 底部操作按钮样式 */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.action-buttons .ant-btn {
+    min-width: 120px;
+    height: 40px;
+    transition: all 0.3s ease;
+}
+
+.action-buttons .ant-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(242, 166, 166, 0.3);
+    opacity: 0.9;
+}
+
+/* 响应式调整 */
+@media (max-width: 576px) {
+    .test-result-container {
+        padding: 16px;
+    }
+
+    .answers-container {
+        flex-direction: column;
+    }
+
+    .navigation-buttons {
+        flex-direction: column;
+    }
+
+    .navigation-buttons .ant-btn {
+        width: 100%;
+    }
+} 

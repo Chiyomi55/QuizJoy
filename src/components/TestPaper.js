@@ -1,377 +1,362 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Card, Button, Radio, Input, Space, Progress, Typography, message, Modal } from 'antd';
+import { ClockCircleOutlined, ExclamationCircleOutlined, FieldTimeOutlined } from '@ant-design/icons';
+import MathSymbolKeyboard from './MathSymbolKeyboard';
 import './TestPaper.css';
-import { FaChevronLeft, FaChevronRight, FaClock, FaTimes, FaCheck, FaPaperPlane } from 'react-icons/fa';
-import { useNavigate, useLocation } from 'react-router-dom';
 
-function TestPaper({ setCurrentPage }) {
-  const navigate = useNavigate();
-  const location = useLocation();
-  
-  // 题目数据 - 增加到15道题
-  const questions = [
-    {
-      id: 1,
-      type: '选择题',
-      title: '三角函数基本角的应用',
-      content: '已知正弦函数y=sin x的图像上有一点P(α, 0.5)，其中0°≤α≤90°，则α等于？',
-      options: ['30°', '45°', '60°', '90°'],
-      answer: '30°',
-      userAnswer: null
-    },
-    {
-      id: 2,
-      type: '填空题',
-      title: '诱导公式计算',
-      content: '若sin x = 0.5，x ∈ [0°, 90°]，则sin(180° - x) = _______',
-      answer: '0.5',
-      userAnswer: null
-    },
-    {
-      id: 3,
-      type: '解答题',
-      title: '三角恒等变换',
-      content: '证明：sin²x + cos²x = 1',
-      answer: '解答步骤...',
-      userAnswer: null
-    },
-    {
-      id: 4,
-      type: '选择题',
-      title: '三角函数图像特征',
-      content: '正弦函数y=sin x的图像在区间[0°, 360°]上有几个零点？',
-      options: ['1个', '2个', '3个', '4个'],
-      answer: '2个',
-      userAnswer: null
-    },
-    {
-      id: 5,
-      type: '填空题',
-      title: '特殊角计算',
-      content: 'cos 60° = _______',
-      answer: '0.5',
-      userAnswer: null
-    },
-    {
-      id: 6,
-      type: '选择题',
-      title: '三角函数周期性',
-      content: '函数y=sin(2x)的最小正周期是？',
-      options: ['π', 'π/2', '2π', '4π'],
-      answer: 'π',
-      userAnswer: null
-    },
-    {
-      id: 7,
-      type: '填空题',
-      title: '三角函数值计算',
-      content: 'tan 45° = _______',
-      answer: '1',
-      userAnswer: null
-    },
-    {
-      id: 8,
-      type: '选择题',
-      title: '三角函数单调性',
-      content: '在区间[0°, 90°]内，下列哪个函数单调递增？',
-      options: ['sin x', 'cos x', 'tan x', 'cot x'],
-      answer: 'sin x',
-      userAnswer: null
-    },
-    {
-      id: 9,
-      type: '填空题',
-      title: '三角函数转化',
-      content: 'sin²x + cos²x = _______',
-      answer: '1',
-      userAnswer: null
-    },
-    {
-      id: 10,
-      type: '选择题',
-      title: '三角函数图像特征',
-      content: '函数y=sin x的图像在一个周期内有几个极值点？',
-      options: ['1个', '2个', '3个', '4个'],
-      answer: '2个',
-      userAnswer: null
-    },
-    {
-      id: 11,
-      type: '解答题',
-      title: '三角函数方程',
-      content: '解方程：2sin x - 1 = 0, x ∈ [0, 2π]',
-      answer: '解答步骤...',
-      userAnswer: null
-    },
-    {
-      id: 12,
-      type: '选择题',
-      title: '三角函数应用',
-      content: '一个等边三角形的边长为2，则其高为？',
-      options: ['√3', '2√3', '1', '2'],
-      answer: '√3',
-      userAnswer: null
-    },
-    {
-      id: 13,
-      type: '填空题',
-      title: '三角函数基本关系',
-      content: '当0° ≤ α ≤ 90°时，sin α = 0.6，则cos α = _______',
-      answer: '0.8',
-      userAnswer: null
-    },
-    {
-      id: 14,
-      type: '选择题',
-      title: '三角函数值域',
-      content: '函数y=2sin x + 1的值域是？',
-      options: ['[-1, 1]', '[0, 2]', '[-1, 3]', '[-2, 0]'],
-      answer: '[-1, 3]',
-      userAnswer: null
-    },
-    {
-      id: 15,
-      type: '解答题',
-      title: '三角函数综合应用',
-      content: '求函数y=2sin x + cos x的最大值和最小值。',
-      answer: '解答步骤...',
-      userAnswer: null
-    }
-  ];
+const { Title, Text, Paragraph } = Typography;
+const { TextArea } = Input;
 
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState(new Array(questions.length).fill(null));
-  const [timeLeft, setTimeLeft] = useState(30 * 60); // 30分钟倒计时
+const morandiColors = {
+    primary: '#F2A6A6',    // 主色调（粉色）
+    secondary: '#F7D1D1',  // 浅粉色
+    submit: '#A5C9C4'      // 提交按钮 - 莫兰迪绿
+};
 
-  // 添加退出确认对话框状态
-  const [showExitConfirm, setShowExitConfirm] = useState(false);
+const TestPaper = () => {
+    const { testId } = useParams();
+    const navigate = useNavigate();
+    const [test, setTest] = useState(null);
+    const [problems, setProblems] = useState([]);
+    const [answers, setAnswers] = useState({});
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(null);
+    const [timeSpent, setTimeSpent] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
 
-  // 添加提交确认对话框状态
-  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
-
-  // 添加路由切换拦截
-  useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      e.preventDefault();
-      e.returnValue = '';
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, []);
-
-  // 处理退出测试
-  const handleExit = () => {
-    setShowExitConfirm(true);
-  };
-
-  // 确认退出
-  const confirmExit = () => {
+    useEffect(() => {
+        if (!testId) {
+            message.error('测试ID无效');
     navigate('/');
-    setCurrentPage('test');
-  };
+            return;
+        }
+        console.log('当前测试ID:', testId);
+        fetchTestDetails();
+    }, [testId, navigate]);
 
-  // 取消退出
-  const cancelExit = () => {
-    setShowExitConfirm(false);
-  };
+    useEffect(() => {
+        if (test?.estimated_time) {
+            setTimeLeft(test.estimated_time * 60); // 转换为秒
+        }
+    }, [test]);
 
-  // 添加倒计时效果
   useEffect(() => {
+        if (timeLeft === null) return;
+
     const timer = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        if (prevTime <= 0) {
+            setTimeLeft(prev => {
+                if (prev <= 1) {
           clearInterval(timer);
-          handleSubmit(); // 时间到自动提交
+                    handleTimeUp();
           return 0;
         }
-        return prevTime - 1;
+                return prev - 1;
       });
+    }, 1000);
+
+        return () => clearInterval(timer);
+    }, [timeLeft]);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setTimeSpent(prev => prev + 1);
     }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
-  // 处理提交
-  const handleSubmit = () => {
-    alert('试卷已提交！');
+    const fetchTestDetails = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                message.error('未登录或登录已过期');
+                navigate('/');
+                return;
+            } 
+
+            console.log('正在获取测试详情，ID:', testId);
+            const response = await fetch(`/api/tests/${testId}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+            
+            console.log('获取测试详情响应状态:', response.status);
+            console.log('响应头:', Object.fromEntries(response.headers.entries()));
+            
+            if (!response.ok) {
+                if (response.status === 401) {
+                    message.error('登录已过期，请重新登录');
     navigate('/');
-    setCurrentPage('test');
-  };
+                    return;
+                }
+                const errorText = await response.text();
+                console.error('错误响应内容:', errorText);
+                throw new Error(`请求失败 (${response.status}): ${errorText}`);
+            }
 
-  // 处理答案变更
-  const handleAnswerChange = (answer) => {
-    const newAnswers = [...answers];
-    newAnswers[currentQuestion] = answer;
-    setAnswers(newAnswers);
-  };
+            const data = await response.json();
+            console.log('获取到的测试详情:', data);
+            
+            if (!data || !data.test_info) {
+                console.error('返回的数据格式不正确:', data);
+                throw new Error('返回的数据格式不正确');
+            }
 
-  // 处理提交点击
-  const handleSubmitClick = () => {
-    setShowSubmitConfirm(true);
-  };
+            setTest(data.test_info);
+            setProblems(data.problems);
+        } catch (error) {
+            console.error('获取测试详情错误:', error);
+            message.error(error.message || '获取测试详情失败');
+            setTest(null);
+            setProblems([]);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  // 渲染题目内容
-  const renderQuestionContent = (question) => {
-    switch (question.type) {
-      case '选择题':
-        return (
-          <div className="options-container">
-            {question.options.map((option, index) => (
-              <label key={index} className="option-item">
-                <input
-                  type="radio"
-                  name={`question-${question.id}`}
-                  checked={answers[currentQuestion] === option}
-                  onChange={() => handleAnswerChange(option)}
-                />
-                <span className="option-text">{option}</span>
-              </label>
-            ))}
-          </div>
-        );
-      case '填空题':
-        return (
-          <div className="fill-blank-container">
-            <input
-              type="text"
-              value={answers[currentQuestion] || ''}
-              onChange={(e) => handleAnswerChange(e.target.value)}
-              placeholder="请输入答案"
-            />
-          </div>
-        );
-      case '解答题':
-        return (
-          <div className="solution-container">
-            <textarea
-              value={answers[currentQuestion] || ''}
-              onChange={(e) => handleAnswerChange(e.target.value)}
-              placeholder="请输入解答过程"
-              rows={6}
-            />
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+    const handleAnswer = (value) => {
+        setAnswers(prev => ({
+            ...prev,
+            [problems[currentIndex].id]: value
+        }));
+    };
 
-  // 格式化时间
+    const handleTimeUp = () => {
+        Modal.confirm({
+            title: '时间到！',
+            icon: <ExclamationCircleOutlined />,
+            content: '测试时间已结束，系统将自动提交您的答案。',
+            okText: '确定',
+            cancelText: null,
+            onOk: handleSubmit
+        });
+    };
+
+    const handleSubmit = async () => {
+        if (submitting) return;
+        
+        const unanswered = problems.filter(p => !answers[p.id]);
+        if (unanswered.length > 0) {
+            Modal.confirm({
+                title: '确认提交',
+                content: `还有 ${unanswered.length} 道题目未作答，确定要提交吗？`,
+                onOk: submitAnswers
+            });
+        } else {
+            submitAnswers();
+        }
+    };
+
+    const submitAnswers = async () => {
+        setSubmitting(true);
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('未登录或登录已过期');
+            }
+
+            const response = await fetch(`/api/tests/${testId}/submit`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    answers,
+                    duration: timeSpent
+                })
+            });
+            
+            if (!response.ok) {
+                if (response.status === 401) {
+                    message.error('登录已过期，请重新登录');
+                    navigate('/');
+                    throw new Error('登录已过期');
+                }
+                throw new Error(`提交失败 (${response.status})`);
+            }
+
+            const result = await response.json();
+            message.success('提交成功！');
+            navigate(`/testresult/${testId}`);
+        } catch (error) {
+            console.error('Error submitting answers:', error);
+            message.error('提交答案失败，请重试');
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
+    const handleSymbolSelect = (symbol) => {
+        const value = answers[problems[currentIndex].id] || '';
+        const newValue = value + symbol;
+        handleAnswer(newValue);
+    };
+
+    const renderAnswerInput = () => {
+        if (currentProblem.type === 'choice' || currentProblem.type === '选择题') {
   return (
-    <div className="test-paper">
-      {/* 左侧题号导航 */}
-      <div className="question-nav">
-        <div className="timer">
-          <FaClock /> {formatTime(timeLeft)}
-        </div>
-        <div className="question-numbers">
-          {questions.map((q, index) => (
-            <button
-              key={q.id}
-              className={`question-number ${index === currentQuestion ? 'active' : ''} ${
-                answers[index] ? 'answered' : ''
-              }`}
-              onClick={() => setCurrentQuestion(index)}
-            >
-              {q.id}
-            </button>
-          ))}
-        </div>
-        {/* 添加提交试卷按钮 */}
-        <button className="submit-paper-btn" onClick={handleSubmitClick}>
-          <FaCheck /> 提交试卷
-        </button>
-        <button className="exit-test-btn" onClick={handleExit}>
-          <FaTimes /> 退出测试
-        </button>
-      </div>
+                <Radio.Group
+                    onChange={(e) => handleAnswer(e.target.value)}
+                    value={answers[currentProblem.id]}
+                >
+                    <Space direction="vertical" style={{ width: '100%' }}>
+                        {currentProblem.options.map((option, index) => (
+                            <Radio key={index} value={option} style={{ width: '100%' }}>
+                                {option}
+                            </Radio>
+                        ))}
+                    </Space>
+                </Radio.Group>
+            );
+        } else if (currentProblem.type === 'fill' || currentProblem.type === '填空题') {
+            return (
+                <Space.Compact style={{ width: '100%' }}>
+                    <Input
+                        value={answers[currentProblem.id] || ''}
+                        onChange={(e) => handleAnswer(e.target.value)}
+                        placeholder="请输入答案"
+                    />
+                    <MathSymbolKeyboard onSymbolSelect={handleSymbolSelect} />
+                </Space.Compact>
+            );
+        } else {
+            // 解答题使用文本框
+            return (
+                <TextArea
+                    value={answers[currentProblem.id] || ''}
+                    onChange={(e) => handleAnswer(e.target.value)}
+                    placeholder="请输入答案"
+                    rows={6}
+                />
+            );
+        }
+    };
 
-      {/* 添加提交确认对话框 */}
-      {showSubmitConfirm && (
-        <div className="exit-confirm-overlay">
-          <div className="exit-confirm-dialog">
-            <h3>确认提交试卷？</h3>
-            <p>提交后答案不可更改！</p>
-            <div className="dialog-buttons">
-              <button className="cancel-btn" onClick={() => setShowSubmitConfirm(false)}>取消</button>
-              <button className="confirm-btn submit" onClick={handleSubmit}>确认提交</button>
-            </div>
-          </div>
-        </div>
-      )}
+    if (loading) {
+        return <div>加载中...</div>;
+    }
 
-      {/* 退出确认对话框 */}
-      {showExitConfirm && (
-        <div className="exit-confirm-overlay">
-          <div className="exit-confirm-dialog">
-            <h3>确认退出测试？</h3>
-            <p>退出后本次测试的做题记录将不会保存！</p>
-            <div className="dialog-buttons">
-              <button className="cancel-btn" onClick={cancelExit}>取消</button>
-              <button className="confirm-btn" onClick={confirmExit}>确认退出</button>
-            </div>
-          </div>
-        </div>
-      )}
+    if (!test || !problems.length) {
+        return <div className="test-paper-container">
+            <Card>
+                <Space direction="vertical" align="center" style={{ width: '100%' }}>
+                    <Title level={3}>无法加载测试</Title>
+                    <Text type="secondary">测试可能不存在或您没有权限访问</Text>
+                    <Button 
+                        onClick={() => navigate('/test-bank')}
+                        style={{
+                            backgroundColor: morandiColors.primary,
+                            borderColor: morandiColors.primary,
+                            color: 'white'
+                        }}
+                    >
+                        返回题库
+                    </Button>
+                </Space>
+            </Card>
+        </div>;
+    }
 
-      {/* 主要内容区域 */}
-      <div className="question-content">
-        <div className="question-header">
-          <div className="question-info">
-            <span className="question-type">{questions[currentQuestion].type}</span>
-            <h2 className="question-title">{questions[currentQuestion].title}</h2>
-          </div>
-          <div className="question-progress">
-            {currentQuestion + 1} / {questions.length}
-          </div>
+    const currentProblem = problems[currentIndex];
+    if (!currentProblem) {
+        return <div className="test-paper-container">
+            <Card>
+                <Space direction="vertical" align="center" style={{ width: '100%' }}>
+                    <Title level={3}>题目加载错误</Title>
+                    <Text type="secondary">当前题目不存在</Text>
+                    <Button 
+                        onClick={() => navigate('/test-bank')}
+                        style={{
+                            backgroundColor: morandiColors.primary,
+                            borderColor: morandiColors.primary,
+                            color: 'white'
+                        }}
+                    >
+                        返回题库
+                    </Button>
+                </Space>
+            </Card>
+        </div>;
+    }
+
+    return (
+        <div className="test-paper-container">
+            <Card>
+                <Space direction="vertical" style={{ width: '100%' }} size="large">
+                    <div className="test-header">
+                        <Title level={2}>{test.title}</Title>
+                        <Space>
+                            <FieldTimeOutlined /> 已用时间: {formatTime(timeSpent)}
+                            {timeLeft !== null && (
+                                <>
+                                    <ClockCircleOutlined /> 剩余时间: {formatTime(timeLeft)}
+                                </>
+                            )}
+                        </Space>
         </div>
 
-        <div className="question-body">
-          <p className="question-text">{questions[currentQuestion].content}</p>
-          {renderQuestionContent(questions[currentQuestion])}
+                    <Progress
+                        percent={((currentIndex + 1) / problems.length) * 100}
+                        format={() => `${currentIndex + 1}/${problems.length}`}
+                        strokeColor={morandiColors.primary}
+                    />
+
+                    <div className="problem-content">
+                        <Title level={4}>
+                            {currentIndex + 1}. {currentProblem.content}
+                        </Title>
+                        {renderAnswerInput()}
         </div>
 
-        <div className="question-footer">
-          {/* 左侧按钮 - 只有不是第一题时显示 */}
-          <div className="left-buttons">
-            {currentQuestion > 0 && (
-              <button
-                className="nav-btn prev"
-                onClick={() => setCurrentQuestion(curr => curr - 1)}
-              >
-                <FaChevronLeft /> 上一题
-              </button>
-            )}
+                    <div className="navigation-buttons">
+                        <Button
+                            onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
+                            disabled={currentIndex === 0}
+                        >
+                            上一题
+                        </Button>
+                        <Button
+                            onClick={() => setCurrentIndex(prev => Math.min(problems.length - 1, prev + 1))}
+                            disabled={currentIndex === problems.length - 1}
+                            style={{
+                                backgroundColor: morandiColors.primary,
+                                borderColor: morandiColors.primary,
+                                color: 'white'
+                            }}
+                        >
+                            下一题
+                        </Button>
+                        <Button
+                            onClick={handleSubmit}
+                            loading={submitting}
+                            style={{
+                                backgroundColor: morandiColors.submit,
+                                borderColor: morandiColors.submit,
+                                color: 'white'
+                            }}
+                        >
+                            提交
+                        </Button>
           </div>
-          
-          {/* 右侧按钮 - 最后一题显示提交，其他显示下一题 */}
-          <div className="right-buttons">
-            {currentQuestion === questions.length - 1 ? (
-              <button
-                className="nav-btn submit"
-                onClick={handleSubmitClick}
-              >
-                提交试卷 <FaPaperPlane />
-              </button>
-            ) : (
-              <button
-                className="nav-btn next"
-                onClick={() => setCurrentQuestion(curr => curr + 1)}
-              >
-                下一题 <FaChevronRight />
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+                </Space>
+            </Card>
     </div>
   );
-}
+};
 
 export default TestPaper; 

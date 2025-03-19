@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.models.problem import Problem, UserProblemStatus
+from app.models.problem import Problem, UserProblemStatus, DailyUserSubmission
 from app import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
@@ -47,6 +47,7 @@ def get_problems():
             'type': p.type,
             'difficulty': p.difficulty,
             'topics': p.topics.split(',') if p.topics else [],
+            'options': json.loads(p.options) if p.options else [],
             'status': problem_statuses.get(p.id, '未完成') if user_id else None
         } for p in problems]
         
@@ -67,16 +68,7 @@ def get_problem(id):
     - 不需要JWT认证，因为题目预览不需要登录
     """
     problem = Problem.query.get_or_404(id)
-    return jsonify({
-        'id': problem.id,
-        'title': problem.title,
-        'content': problem.content,
-        'type': problem.type,
-        'difficulty': problem.difficulty,
-        'topics': problem.topics.split(',') if problem.topics else [],
-        'options': json.loads(problem.options) if problem.options else [],
-        'explanation': problem.explanation
-    })
+    return jsonify(problem.to_dict(include_answer=False))
 
 @bp.route('/', methods=['POST'])
 def create_problem():
@@ -146,8 +138,25 @@ def submit_answer(id):
         status.last_submit_time = datetime.utcnow()
         status.last_answer = answer
         
+        # 更新每日提交记录
+        today = datetime.now().date()
+        daily_submission = DailyUserSubmission.query.filter_by(
+            user_id=user_id,
+            submission_date=today
+        ).first()
+        
+        if not daily_submission:
+            daily_submission = DailyUserSubmission(
+                user_id=user_id,
+                submission_date=today,
+                submission_count=1
+            )
+            db.session.add(daily_submission)
+        else:
+            daily_submission.submission_count += 1
+        
         db.session.commit()
-        print(f"Status updated successfully")
+        print(f"Status and daily submission updated successfully")
         
         response_data = {
             'correct': is_correct,

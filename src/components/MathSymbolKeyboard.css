@@ -1,0 +1,71 @@
+.math-symbol-keyboard {
+    width: 320px;
+}
+
+.math-symbol-keyboard .ant-tabs-nav {
+    margin-bottom: 12px;
+}
+
+.symbol-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 8px;
+}
+
+.symbol-button {
+    height: 40px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #E8CFCF;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.symbol-button:hover {
+    background: #FDF6F6;
+    border-color: #F2A6A6;
+    color: #F2A6A6;
+    transform: translateY(-1px);
+}
+
+.math-keyboard-trigger {
+    padding: 4px 8px;
+    font-size: 20px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.math-keyboard-trigger:hover {
+    color: #F2A6A6;
+    background: #FDF6F6;
+}
+
+.math-symbol-keyboard-popover {
+    padding: 0;
+}
+
+.math-symbol-keyboard-popover .ant-popover-inner {
+    border-radius: 8px;
+}
+
+.math-symbol-keyboard-popover .ant-popover-inner-content {
+    padding: 8px;
+}
+
+.math-symbol-keyboard .ant-tabs-tab {
+    padding: 8px 12px;
+    margin: 0 4px;
+}
+
+.math-symbol-keyboard .ant-tabs-tab.ant-tabs-tab-active {
+    background: #FDF6F6;
+}
+
+.math-symbol-keyboard .ant-tabs-ink-bar {
+    background: #F2A6A6;
+} 

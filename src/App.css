@@ -8,9 +8,18 @@
 }
 
 .App {
+  text-align: center;
+  background-color: #FDF6F6;
   min-height: 100vh;
-  background-color: var(--background-color);
   color: var(--text-color);
+}
+
+.ant-layout {
+  background-color: #FDF6F6 !important;
+}
+
+.ant-layout-content {
+  background-color: #FDF6F6;
 }
 
 /* 导航栏样式 */

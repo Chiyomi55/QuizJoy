@@ -43,6 +43,9 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease;
   cursor: pointer;
+  aspect-ratio: 4/3;
+  display: flex;
+  flex-direction: column;
 }
 
 .test-card:hover {
@@ -72,9 +75,14 @@
 }
 
 .difficulty-stars {
-  color: #fb7d00f0;
+  color: #FFB800;
   display: flex;
   gap: 2px;
+  font-size: 16px;
+}
+
+.difficulty-stars .anticon {
+  font-size: 16px;
 }
 
 .test-description {
@@ -82,6 +90,8 @@
   font-size: 0.95rem;
   margin-bottom: 16px;
   line-height: 1.5;
+  text-align: left;
+  flex-grow: 1;
 }
 
 .test-meta {
@@ -227,4 +237,127 @@
 
 .type-tag:hover {
   transform: translateY(-2px);
+}
+
+.test-bank-container {
+    padding: 24px;
+    min-height: calc(100vh - 64px);
+    background-color: #FDF6F6;
+}
+
+.test-card-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.test-card-header {
+    margin-bottom: 12px;
+}
+
+.test-info-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.test-topics {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -4px;
+}
+
+.test-card, .completed-test {
+    transition: all 0.3s ease;
+}
+
+.test-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08) !important;
+}
+
+.completed-test:hover {
+    transform: translateY(-2px);
+}
+
+.ant-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.ant-tag {
+    border-radius: 4px;
+    padding: 4px 8px;
+    border: none;
+    margin: 0;
+}
+
+.ant-list-item {
+    padding: 8px;
+}
+
+.start-test-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.start-test-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(242, 166, 166, 0.3);
+}
+
+.start-test-button .anticon {
+    transition: transform 0.3s ease;
+}
+
+.start-test-button:hover .anticon {
+    transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+    .test-bank-container {
+        padding: 16px;
+    }
+    
+    .ant-card-body {
+        padding: 16px;
+    }
+    
+    .start-test-button {
+        height: 36px;
+        font-size: 14px;
+    }
+}
+
+/* 难度等级颜色 */
+.difficulty-1 { color: #87d068; }
+.difficulty-2 { color: #108ee9; }
+.difficulty-3 { color: #2db7f5; }
+.difficulty-4 { color: #f50; }
+.difficulty-5 { color: #ff4d4f; }
+
+/* 状态标签样式 */
+.status-badge {
+    margin-left: 8px;
+}
+
+/* 截止时间提醒样式 */
+.deadline-warning {
+    color: #ff4d4f;
+    font-weight: bold;
+}
+
+#root {
+    background-color: #FDF6F6;
+    min-height: 100vh;
+}
+
+.ant-layout {
+    background-color: #FDF6F6 !important;
 } 
