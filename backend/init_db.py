@@ -10,51 +10,14 @@ from datetime import datetime, timedelta
 import json
 import logging
 from app.models.study_record import StudyStatistics
+import random  # 添加random模块
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# 自定义活动数据
-ACTIVITY_DATA = {
-    # 最近一周的数据
-    "2024-03-01": 5,
-    "2024-03-02": 3,
-    "2024-03-03": 7,
-    "2024-03-04": 4,
-    "2024-03-05": 6,
-    "2024-03-06": 8,
-    "2024-03-07": 5,
-    
-    # 上周的数据
-    "2024-02-23": 4,
-    "2024-02-24": 6,
-    "2024-02-25": 3,
-    "2024-02-26": 7,
-    "2024-02-27": 5,
-    "2024-02-28": 4,
-    "2024-02-29": 6,
-    
-    # 本月其他日期的数据
-    "2024-02-15": 8,
-    "2024-02-16": 5,
-    "2024-02-17": 4,
-    "2024-02-18": 6,
-    "2024-02-19": 7,
-    "2024-02-20": 3,
-    
-    # 上个月的一些数据
-    "2024-01-25": 5,
-    "2024-01-26": 4,
-    "2024-01-27": 6,
-    "2024-01-28": 7,
-    "2024-01-29": 3,
-    "2024-01-30": 5,
-    "2024-01-31": 4,
-}
-
 # 自定义连续做题天数
-STREAK_DAYS = 15
+STREAK_DAYS = 2
 
 def init_db():
     try:
@@ -136,53 +99,58 @@ def init_db():
             
             if len(problem_ids) > 0:
                 # 使用字典记录每天的做题数量
-                # 键：日期对象
-                # 值：当天的做题数量
-                daily_submissions = {}  
+                daily_submissions = {}
                 
-                # 遍历每道题目，创建做题记录
-                for i, problem_id in enumerate(problem_ids):
-                    # 计算提交日期：将题目分散到最近30天内
-                    # 使用 i % 30 确保日期在30天范围内循环
-                    submission_date = datetime.now().date() - timedelta(days=i % 30)
-                    
-                    # 创建做题状态记录
-                    # 每三道题设置一道错误（i % 3 == 0 时为错误）
-                    # submitted_at 设置为当天的开始时间（00:00:00）
-                    status = UserProblemStatus(
-                        user_id=test_student.id,
-                        problem_id=problem_id,
-                        status='正确' if i % 3 != 0 else '错误',
-                        submitted_at=datetime.combine(submission_date, datetime.min.time())
-                    )
-                    db.session.add(status)
-                    
-                    # 统计每天的做题数量
-                    # 如果这个日期已经有记录，就加1
-                    # 如果这个日期还没有记录，就初始化为1
-                    if submission_date in daily_submissions:
-                        daily_submissions[submission_date] += 1
-                    else:
-                        daily_submissions[submission_date] = 1
-                    
-                    # 性能优化：每10条记录提交一次
-                    # 避免一次性提交太多记录导致数据库压力过大
-                    if (i + 1) % 10 == 0:
-                        db.session.commit()
+                # 生成30天内的随机做题记录
+                current_date = datetime.now().date()
+                days_range = 120  # 生成30天内的记录
                 
-                # 根据统计的每日做题数量，创建活动记录
+                # 生成随机的做题日期
+                # 通过在30天范围内随机选择日期来实现不规则间隔
+                random_days = sorted(random.sample(range(days_range), 70))  # 在30天内随机选择15天
+                
+                for day in random_days:
+                    submission_date = current_date - timedelta(days=day)
+                    # 当天随机做1-10道题
+                    daily_count = random.randint(1, 10)
+                    
+                    # 为这一天生成做题记录
+                    for _ in range(daily_count):
+                        # 随机选择一道题目
+                        problem_id = random.choice(problem_ids)
+                        # 随机生成提交时间（当天的随机时刻）
+                        random_hour = random.randint(9, 22)  # 假设在9点到22点之间做题
+                        random_minute = random.randint(0, 59)
+                        submission_time = datetime.combine(
+                            submission_date,
+                            datetime.min.time()
+                        ) + timedelta(hours=random_hour, minutes=random_minute)
+                        
+                        # 创建做题记录，80%的正确率
+                        status = UserProblemStatus(
+                            user_id=test_student.id,
+                            problem_id=problem_id,
+                            status='正确' if random.random() > 0.2 else '错误',
+                            submitted_at=submission_time
+                        )
+                        db.session.add(status)
+                    
+                    # 记录这一天的做题数量
+                    daily_submissions[submission_date] = daily_count
+                    
+                    # 每天的记录处理完后就提交一次
+                    db.session.commit()
+                
+                # 创建每日提交记录
                 for date, count in daily_submissions.items():
-                    # 创建每日提交记录
-                    # 这些记录将用于前端显示活动热力图
                     daily_record = DailyUserSubmission(
                         user_id=test_student.id,
                         submission_date=date,
-                        count=count  # 使用统计的做题数量
+                        count=count
                     )
                     db.session.add(daily_record)
-                    logger.info(f"添加活动数据: 日期={date}, 提交次数={count}")
                 
-                # 最后提交所有未提交的记录
+                # 最后提交所有记录
                 db.session.commit()
             
             # 更新用户的连续做题天数
