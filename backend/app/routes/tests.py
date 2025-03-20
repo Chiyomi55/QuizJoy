@@ -160,7 +160,7 @@ def submit_test(id):
                 if str(answer) == str(problems_dict[problem_id].correct_answer):
                     correct_count += 1
         
-        score = (correct_count / total_questions) * 100
+        score = round((correct_count / total_questions) * 100, 1)  # 四舍五入到一位小数
         
         # 保存提交记录
         submission = TestSubmission(

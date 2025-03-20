@@ -27,6 +27,9 @@ class User(db.Model):
     bio = db.Column(db.Text)  # 个人简介
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     last_login = db.Column(db.DateTime)  # 最后登录时间
+    
+    # 学习统计字段
+    streak_days = db.Column(db.Integer, default=0)  # 连续做题天数
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -49,5 +52,6 @@ class User(db.Model):
             'subject': self.subject if self.role == 'teacher' else None,
             'title': self.title if self.role == 'teacher' else None,
             'created_at': self.created_at.isoformat() if self.created_at else None,
-            'last_login': self.last_login.isoformat() if self.last_login else None
+            'last_login': self.last_login.isoformat() if self.last_login else None,
+            'streak_days': self.streak_days  # 添加连续做题天数到返回数据中
         } 

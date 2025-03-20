@@ -150,8 +150,14 @@ def get_activity():
         DailyUserSubmission.submission_date <= end_date
     ).all()
     
-    # 转换为前端需要的格式
-    activity_data = [submission.to_dict() for submission in submissions]
+    # 转换为前端需要的格式 {date: string, count: number}
+    activity_data = [
+        {
+            'date': submission.submission_date.strftime('%Y-%m-%d'),
+            'count': submission.count
+        }
+        for submission in submissions
+    ]
     
     return jsonify(activity_data)
 
@@ -217,9 +223,8 @@ def get_difficulty_distribution():
         problem_statuses = UserProblemStatus.query.filter_by(user_id=user_id).all()
         print(f"Found {len(problem_statuses)} problem statuses")
         
-        # 统计每个难度的完成情况
+        # 统计每个难度的题目数量
         difficulty_stats = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
-        total_problems = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
         
         for status in problem_statuses:
             problem = Problem.query.get(status.problem_id)
@@ -230,23 +235,26 @@ def get_difficulty_distribution():
             if difficulty not in difficulty_stats:  # 确保难度值在有效范围内
                 continue
                 
-            total_problems[difficulty] += 1
-            if status.status == '正确':
-                difficulty_stats[difficulty] += 1
+            difficulty_stats[difficulty] += 1
         
-        print(f"Difficulty stats: {difficulty_stats}")
-        print(f"Total problems: {total_problems}")
+        # 难度映射
+        difficulty_map = {
+            1: '简单',
+            2: '中等',
+            3: '较难',
+            4: '困难',
+            5: '极难'
+        }
         
-        # 计算完成率
-        result = []
-        for difficulty in range(1, 6):
-            completion_rate = (difficulty_stats[difficulty] / total_problems[difficulty] * 100) if total_problems[difficulty] > 0 else 0
-            result.append({
-                'difficulty': difficulty,
-                'completed': difficulty_stats[difficulty],
-                'total': total_problems[difficulty],
-                'completion_rate': round(completion_rate, 2)
-            })
+        # 转换为前端需要的格式 {type: string, value: number}
+        result = [
+            {
+                'type': difficulty_map[difficulty],
+                'value': count
+            }
+            for difficulty, count in difficulty_stats.items()
+            if count > 0  # 只返回有做题记录的难度
+        ]
         
         print(f"Returning result: {result}")
         return jsonify(result)

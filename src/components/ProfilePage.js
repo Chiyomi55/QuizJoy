@@ -16,7 +16,8 @@ function ProfilePage({ user, onLogin }) {
     class: '',
     achievements: [],
     subject: '',
-    title: ''
+    title: '',
+    streak_days: 0
   });
   const [activityData, setActivityData] = useState([]);
   const [knowledgeStatus, setKnowledgeStatus] = useState([]);
@@ -48,7 +49,8 @@ function ProfilePage({ user, onLogin }) {
             class: userData.grade || '',
             subject: userData.subject || '',
             title: userData.title || '',
-            achievements: userData.achievements || []
+            achievements: userData.achievements || [],
+            streak_days: userData.streak_days || 0
           };
           setUserInfo(updatedUserInfo);
         }
@@ -56,7 +58,11 @@ function ProfilePage({ user, onLogin }) {
         // 处理活动数据
         if (activityResponse.ok) {
           const activityData = await activityResponse.json();
-          setActivityData(activityData);
+          console.log('Activity data from server:', activityData); // 添加日志
+          setActivityData(activityData.map(item => ({
+            date: item.date,
+            count: item.count
+          })));
         }
 
         // 处理知识点状态
@@ -186,7 +192,8 @@ function ProfilePage({ user, onLogin }) {
         nickname: updatedUser.nickname || '',
         school: updatedUser.school || '',
         class: updatedUser.grade || '',  // 使用后端返回的 grade 字段
-        achievements: updatedUser.achievements || []
+        achievements: updatedUser.achievements || [],
+        streak_days: updatedUser.streak_days || 0
       });
       
       setIsEditing(false);
@@ -224,13 +231,6 @@ function ProfilePage({ user, onLogin }) {
     xAxis: {
       line: null,
       tickLine: null,
-      grid: {
-        line: {
-          style: {
-            lineDash: null,
-          },
-        },
-      },
     },
     yAxis: {
       label: false,
@@ -238,16 +238,13 @@ function ProfilePage({ user, onLogin }) {
         alternateColor: 'rgba(0, 0, 0, 0.04)',
       },
     },
-    // 开启辅助点
-    point: {
-      size: 2,
-    },
     area: {
       style: {
-        fill: '#F2A6A6',
         fillOpacity: 0.3,
       },
     },
+    color: '#F2A6A6',
+    legend: false,
   };
 
   const pieConfig = {
@@ -255,28 +252,55 @@ function ProfilePage({ user, onLogin }) {
     angleField: 'value',
     colorField: 'type',
     radius: 0.8,
+    innerRadius: 0.6,
     color: ['#E8D4D4', '#F2A6A6', '#A5C9C4', '#D4E2D4', '#ECE3D4'],
     label: {
-      type: 'spider',
-      content: '{name}\n{percentage}',
-      style: {
-        fontSize: 12,
-        textAlign: 'center',
-      },
+      text: {
+        style: {
+          fontSize: 12,
+          textAlign: 'center',
+        },
+        content: (item) => {
+          if (!item || !item.percent) return '0%';
+          return `${(item.percent * 100).toFixed(0)}%`;
+        }
+      }
     },
     legend: {
       position: 'bottom',
       itemHeight: 8,
       itemWidth: 8,
-      marker: {
-        symbol: 'square',
-      },
     },
     tooltip: {
       formatter: (datum) => {
-        return { name: datum.type, value: `${datum.value}题 (${datum.rate}%)` };
+        return `${datum.type}: ${datum.value}题`;
       }
     },
+    statistic: {
+      title: {
+        style: {
+          color: '#666',
+          fontSize: '14px',
+        },
+        content: '总做题数'
+      },
+      content: {
+        style: {
+          color: '#F2A6A6',
+          fontSize: '24px',
+          fontWeight: 'bold',
+        },
+        formatter: (_, data) => {
+          const total = data.reduce((sum, item) => sum + item.value, 0);
+          return total;
+        }
+      },
+    },
+    interactions: [
+      {
+        type: 'element-active',
+      },
+    ],
   };
 
   return (
@@ -285,29 +309,102 @@ function ProfilePage({ user, onLogin }) {
       <Row gutter={24}>
         <Col span={6}>
           <Card className="profile-card">
-            <div className="profile-header">
-              <Avatar size={100} icon={<UserOutlined />} />
-              <h2>{userInfo.nickname || user.nickname || '未设置昵称'}</h2>
-              <p>{userInfo.school || '未设置学校'} {userInfo.class || '未设置班级'}</p>
-            </div>
-            
-            <div className="profile-stats">
-              <Statistic title="总做题数" value={activityData.reduce((sum, item) => sum + item.count, 0)} />
-              <Statistic title="连续做题" value={userInfo.streak_days || 0} suffix="天" />
-            </div>
+            <div className="profile-content">
+              {/* 头像部分 */}
+              <div className="avatar-section">
+                <Avatar 
+                  size={120} 
+                  icon={<UserOutlined />} 
+                  src={userInfo.avatar_url}
+                  className="profile-avatar"
+                />
+              </div>
 
-            <div className="achievements-section">
-              <h3><TrophyOutlined /> 成就</h3>
-              <List
-                dataSource={userInfo.achievements || []}
-                renderItem={item => (
-                  <List.Item>
-                    <List.Item.Meta
-                      title={item}
-                    />
-                  </List.Item>
+              {/* 个人信息部分 */}
+              <div className="info-section">
+                {isEditing ? (
+                  <div className="edit-form">
+                    <div className="form-item">
+                      <input
+                        type="text"
+                        value={userInfo.nickname}
+                        onChange={(e) => setUserInfo({...userInfo, nickname: e.target.value})}
+                        placeholder="昵称"
+                        className="edit-input"
+                      />
+                    </div>
+                    <div className="form-item">
+                      <input
+                        type="text"
+                        value={userInfo.school}
+                        onChange={(e) => setUserInfo({...userInfo, school: e.target.value})}
+                        placeholder="学校"
+                        className="edit-input"
+                      />
+                    </div>
+                    <div className="form-item">
+                      <input
+                        type="text"
+                        value={userInfo.class}
+                        onChange={(e) => setUserInfo({...userInfo, class: e.target.value})}
+                        placeholder="班级"
+                        className="edit-input"
+                      />
+                    </div>
+                    <div className="edit-buttons">
+                      <button onClick={handleSave} className="save-btn">
+                        保存
+                      </button>
+                      <button onClick={() => setIsEditing(false)} className="cancel-btn">
+                        取消
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="info-display">
+                    <div className="info-item">
+                      <label>昵称</label>
+                      <span>{userInfo.nickname || user.nickname || '未设置昵称'}</span>
+                    </div>
+                    <div className="info-item">
+                      <label>学校</label>
+                      <span>{userInfo.school || '未设置学校'}</span>
+                    </div>
+                    <div className="info-item">
+                      <label>班级</label>
+                      <span>{userInfo.class || '未设置班级'}</span>
+                    </div>
+                  </div>
                 )}
-              />
+              </div>
+
+              {/* 统计信息部分 */}
+              <div className="profile-stats">
+                <Statistic title="总做题数" value={activityData.reduce((sum, item) => sum + item.count, 0)} />
+                <Statistic title="连续做题" value={userInfo.streak_days || 0} suffix="天" />
+              </div>
+
+              {/* 编辑按钮部分 */}
+              {!isEditing && (
+                <button onClick={() => setIsEditing(true)} className="edit-profile-btn">
+                  编辑个人资料
+                </button>
+              )}
+
+              {/* 成就部分 */}
+              <div className="achievements-section">
+                <h3><TrophyOutlined /> 成就</h3>
+                <List
+                  dataSource={userInfo.achievements || []}
+                  renderItem={item => (
+                    <List.Item>
+                      <List.Item.Meta
+                        title={item}
+                      />
+                    </List.Item>
+                  )}
+                />
+              </div>
             </div>
           </Card>
         </Col>
@@ -316,13 +413,18 @@ function ProfilePage({ user, onLogin }) {
           <Card className="activity-card" style={{ marginBottom: '16px' }}>
             <h3>学习热力图</h3>
             <div className="activity-heatmap">
+              {console.log('Rendering heatmap with data:', activityData)}
               <ReactCalendarHeatmap
                 values={activityData}
                 startDate={new Date(new Date().setDate(new Date().getDate() - 180))}
                 endDate={new Date()}
                 classForValue={value => {
+                  console.log('classForValue called with:', value);
                   if (!value) return 'color-empty';
-                  return `color-scale-${Math.min(Math.floor(value.count / 2), 4)}`;
+                  if (value.count <= 2) return 'color-scale-1';
+                  if (value.count <= 4) return 'color-scale-2';
+                  if (value.count <= 6) return 'color-scale-3';
+                  return 'color-scale-4';
                 }}
                 titleForValue={value => {
                   if (!value) return '没有提交';
@@ -351,7 +453,7 @@ function ProfilePage({ user, onLogin }) {
 
           <Row gutter={16}>
             <Col span={12}>
-              <Card className="knowledge-card" bodyStyle={{ height: '300px' }}>
+              <Card className="knowledge-card" styles={{ body: { height: '300px' } }}>
                 <h3>知识点掌握度</h3>
                 <div style={{ height: '250px' }}>
                   <Radar {...radarConfig} />
@@ -359,7 +461,7 @@ function ProfilePage({ user, onLogin }) {
               </Card>
             </Col>
             <Col span={12}>
-              <Card className="score-card" bodyStyle={{ height: '300px' }}>
+              <Card className="score-card" styles={{ body: { height: '300px' } }}>
                 <h3>难度分布</h3>
                 <div style={{ height: '250px' }}>
                   <Pie {...pieConfig} />
