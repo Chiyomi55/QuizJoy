@@ -1,6 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.models.problem import Problem, UserProblemStatus, DailyUserSubmission
-from app import db
+from app.models import db, Problem, UserProblemStatus, DailyUserSubmission
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
 import json

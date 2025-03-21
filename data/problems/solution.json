@@ -99,6 +99,78 @@
             "topics": "微分方程",
             "correct_answer": "y = e^x",
             "explanation": "1. 分离变量：dy/y = dx\n2. 两边积分：ln|y| = x + C\n3. 所以y = Ce^x\n4. 代入初值条件y(0) = 1\n5. 得到C = 1，因此y = e^x"
+        },
+        {
+            "title": "参数方程应用",
+            "content": "已知曲线的参数方程为：x=2cost, y=sint (t∈[0,2π])。求该曲线的方程。",
+            "type": "解答题",
+            "difficulty": 5,
+            "topics": "参数方程,解析几何",
+            "correct_answer": "4x² + y² = 4",
+            "explanation": "1. 由参数方程得：x/2=cost, y=sint\n2. 平方相加：x²/4+y²=cos²t+sin²t=1\n3. 整理得：4x²+y²=4"
+        },
+        {
+            "title": "数列证明2",
+            "content": "用数学归纳法证明：对于任意正整数n，2^n > 2n+1成立。",
+            "type": "解答题",
+            "difficulty": 4,
+            "topics": "数学归纳法,不等式",
+            "correct_answer": "证明略",
+            "explanation": "1. n=1时，2>3不成立，从n=2开始\n2. n=2时，4>5成立\n3. 假设n=k时成立，即2^k>2k+1\n4. 当n=k+1时，2^(k+1)=2×2^k>2(2k+1)=4k+2>2(k+1)+1\n5. 得证"
+        },
+        {
+            "title": "立体几何计算2",
+            "content": "在正四棱锥中，底面是边长为2的正方形，侧棱长为3。求这个正四棱锥的体积。",
+            "type": "解答题",
+            "difficulty": 4,
+            "topics": "立体几何",
+            "correct_answer": "4/3",
+            "explanation": "1. 设高为h\n2. 由侧棱长得：h²+1=9\n3. h=2√2\n4. V=(1/3)×4×2√2=4/3"
+        },
+        {
+            "title": "函数最值2",
+            "content": "设函数f(x)=|x-1|+|x+1|，求f(x)的最小值。",
+            "type": "解答题",
+            "difficulty": 4,
+            "topics": "函数,最值",
+            "correct_answer": "2",
+            "explanation": "1. 当x≥1时，f(x)=2x\n2. 当-1≤x≤1时，f(x)=2\n3. 当x≤-1时，f(x)=-2x\n4. 综上，最小值为2"
+        },
+        {
+            "title": "概率应用",
+            "content": "甲、乙两人轮流抛硬币，以先抛出正面者为胜。若甲先抛，求甲获胜的概率。",
+            "type": "解答题",
+            "difficulty": 5,
+            "topics": "概率统计",
+            "correct_answer": "2/3",
+            "explanation": "1. 设甲胜概率为p\n2. p=1/2+(1/2)²p\n3. 解得p=2/3"
+        },
+        {
+            "title": "向量应用2",
+            "content": "已知向量a,b满足|a|=2,|b|=3,a·b=3。求|a+b|的值。",
+            "type": "解答题",
+            "difficulty": 4,
+            "topics": "向量",
+            "correct_answer": "5",
+            "explanation": "1. |a+b|²=|a|²+|b|²+2a·b\n2. =4+9+6=19\n3. |a+b|=√19=5"
+        },
+        {
+            "title": "三角函数证明2",
+            "content": "证明：对于任意角α,β，sin(α+β)=sinαcosβ+cosαsinβ",
+            "type": "解答题",
+            "difficulty": 5,
+            "topics": "三角函数,证明",
+            "correct_answer": "证明略",
+            "explanation": "1. 设P(cosα,sinα),Q(cosβ,sinβ)\n2. 利用向量旋转的几何意义\n3. 通过向量的点积和叉积\n4. 得到sin(α+β)=sinαcosβ+cosαsinβ"
+        },
+        {
+            "title": "微分方程应用2",
+            "content": "求解微分方程：y'+y=e^x，y(0)=0",
+            "type": "解答题",
+            "difficulty": 5,
+            "topics": "微分方程",
+            "correct_answer": "xe^x",
+            "explanation": "1. 设y=ue^x\n2. 代入原方程得u'e^x=e^x\n3. u'=1\n4. u=x+C\n5. 代入初值得C=0\n6. 所以y=xe^x"
         }
     ]
 } 

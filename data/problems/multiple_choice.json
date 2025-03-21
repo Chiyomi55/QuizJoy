@@ -340,6 +340,296 @@
             "options": ["8", "9", "10", "11"],
             "correct_answer": "10",
             "explanation": "公差d=3，an=2+(n-1)3=29，解得n=10"
+        },
+        {
+            "title": "微分方程基础",
+            "content": "微分方程y'+2y=0的通解是？",
+            "type": "选择题",
+            "difficulty": 3,
+            "topics": "微分方程",
+            "options": ["Ce^(-2x)", "Ce^(2x)", "Ce^x", "-2Ce^x"],
+            "correct_answer": "Ce^(-2x)",
+            "explanation": "分离变量可得dy/y=-2dx，两边积分得lny=-2x+lnC，即y=Ce^(-2x)"
+        },
+        {
+            "title": "空间向量基础",
+            "content": "空间向量a=(1,1,1)与b=(1,0,-1)的夹角是？",
+            "type": "选择题",
+            "difficulty": 3,
+            "topics": "空间向量",
+            "options": ["45°", "60°", "90°", "120°"],
+            "correct_answer": "60°",
+            "explanation": "cosθ=(a·b)/(|a|·|b|)=0/√6=1/2，所以θ=60°"
+        },
+        {
+            "title": "概率统计进阶",
+            "content": "从52张扑克牌中抽取5张，恰好包含4张A的概率是？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "概率统计",
+            "options": ["C(4,4)C(48,1)/C(52,5)", "4C(48,1)/C(52,5)", "C(4,4)×48/C(52,5)", "4/C(52,5)"],
+            "correct_answer": "C(4,4)C(48,1)/C(52,5)",
+            "explanation": "需要选4张A和1张非A，概率为C(4,4)C(48,1)/C(52,5)"
+        },
+        {
+            "title": "数列极限2",
+            "content": "数列{an}满足an=(n²+1)/(n²-1)，则当n→∞时，an的极限是？",
+            "type": "选择题",
+            "difficulty": 3,
+            "topics": "极限",
+            "options": ["0", "1", "2", "∞"],
+            "correct_answer": "1",
+            "explanation": "分子分母同除n²，得到(1+1/n²)/(1-1/n²)，当n→∞时极限为1"
+        },
+        {
+            "title": "立体几何计算",
+            "content": "正八面体的体积是V，其内切球的体积是？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "立体几何",
+            "options": ["V/3", "V/6", "V/9", "V/12"],
+            "correct_answer": "V/6",
+            "explanation": "正八面体内切球体积与正八面体体积比为1:6"
+        },
+        {
+            "title": "函数最值",
+            "content": "函数f(x)=x³-3x²在[0,3]上的最小值是？",
+            "type": "选择题",
+            "difficulty": 3,
+            "topics": "导数,最值",
+            "options": ["-2", "-1", "0", "1"],
+            "correct_answer": "-2",
+            "explanation": "f'(x)=3x²-6x=3x(x-2)，代入x=0,2,3比较得最小值为-2"
+        },
+        {
+            "title": "复数运算2",
+            "content": "复数z满足|z|=2且arg(z)=π/3，则z的虚部为？",
+            "type": "选择题",
+            "difficulty": 3,
+            "topics": "复数",
+            "options": ["1", "√3", "2", "3"],
+            "correct_answer": "√3",
+            "explanation": "z=2(cos(π/3)+isin(π/3))，虚部为2sin(π/3)=2×√3/2=√3"
+        },
+        {
+            "title": "圆锥曲线焦点",
+            "content": "双曲线x²/16-y²/9=1的焦点到中心的距离是？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "圆锥曲线",
+            "options": ["5", "7", "3", "4"],
+            "correct_answer": "5",
+            "explanation": "c²=a²+b²=16+9=25，所以c=5"
+        },
+        {
+            "title": "三角函数方程",
+            "content": "方程sin²x+cos x=1在[0,2π]内有几个解？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "三角函数",
+            "options": ["1", "2", "3", "4"],
+            "correct_answer": "2",
+            "explanation": "cos x=1-sin²x，代入得sin⁴x=0，所以sin x=0，x=0,π"
+        },
+        {
+            "title": "数列通项2",
+            "content": "数列{an}满足an+1=2an+1，a1=2，则a4=？",
+            "type": "选择题",
+            "difficulty": 3,
+            "topics": "数列",
+            "options": ["23", "25", "27", "29"],
+            "correct_answer": "23",
+            "explanation": "依次计算：a2=5,a3=11,a4=23"
+        },
+        {
+            "title": "立体几何角度2",
+            "content": "正方体的对角线与面对角线的夹角是？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "立体几何",
+            "options": ["30°", "45°", "60°", "35.3°"],
+            "correct_answer": "35.3°",
+            "explanation": "夹角为arccos(√2/√3)≈35.3°"
+        },
+        {
+            "title": "概率统计应用",
+            "content": "某班30人参加考试，及格率为80%，则及格人数的标准差是？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "概率统计",
+            "options": ["2.19", "2.20", "2.21", "2.22"],
+            "correct_answer": "2.19",
+            "explanation": "二项分布B(30,0.8)的标准差=√(npq)=√(30×0.8×0.2)≈2.19"
+        },
+        {
+            "title": "向量运算2",
+            "content": "已知|a|=3,|b|=4,a·b=6，则|a-b|=？",
+            "type": "选择题",
+            "difficulty": 3,
+            "topics": "向量",
+            "options": ["5", "7", "3", "1"],
+            "correct_answer": "5",
+            "explanation": "|a-b|²=|a|²+|b|²-2(a·b)=9+16-12=25，所以|a-b|=5"
+        },
+        {
+            "title": "函数图像2",
+            "content": "函数y=x³-3x²+2的拐点个数是？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "导数",
+            "options": ["0", "1", "2", "3"],
+            "correct_answer": "1",
+            "explanation": "f''(x)=6x-6=6(x-1)，拐点x=1"
+        },
+        {
+            "title": "数列求和2",
+            "content": "等差数列前n项和为Sn，若S3=12，S4=20，则S5=？",
+            "type": "选择题",
+            "difficulty": 3,
+            "topics": "数列",
+            "options": ["30", "25", "35", "40"],
+            "correct_answer": "30",
+            "explanation": "由S4-S3=8可知a4=8，公差为2，所以a5=10，S5=30"
+        },
+        {
+            "title": "圆锥曲线2",
+            "content": "抛物线y²=4px的准线方程是？",
+            "type": "选择题",
+            "difficulty": 3,
+            "topics": "圆锥曲线",
+            "options": ["x=-p", "x=p", "x=-p/2", "x=p/2"],
+            "correct_answer": "x=-p",
+            "explanation": "抛物线的准线到焦点的距离为2p，准线在焦点左侧，所以方程为x=-p"
+        },
+        {
+            "title": "复数运算3",
+            "content": "复数z满足z²+2z+2=0，则|z|=？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "复数",
+            "options": ["1", "√2", "2", "3"],
+            "correct_answer": "√2",
+            "explanation": "z=-1±i，所以|z|=√2"
+        },
+        {
+            "title": "三角函数值2",
+            "content": "tan(π/12)的值等于？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "三角函数",
+            "options": ["2-√3", "√3-1", "2+√3", "√3+1"],
+            "correct_answer": "2-√3",
+            "explanation": "利用半角公式可得tan(π/12)=2-√3"
+        },
+        {
+            "title": "立体几何体积2",
+            "content": "正四棱锥的底面是边长为2的正方形，侧棱长为3，则其体积为？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "立体几何",
+            "options": ["4/3", "8/3", "16/3", "32/3"],
+            "correct_answer": "4/3",
+            "explanation": "设高为h，由侧棱长得h²+2=9，h=2√2，V=(1/3)×4×2√2=4/3"
+        },
+        {
+            "title": "概率统计2",
+            "content": "某随机变量X的期望为2，方差为4，则E(X²)=？",
+            "type": "选择题",
+            "difficulty": 3,
+            "topics": "概率统计",
+            "options": ["6", "8", "10", "12"],
+            "correct_answer": "8",
+            "explanation": "D(X)=E(X²)-[E(X)]²，所以E(X²)=D(X)+[E(X)]²=4+4=8"
+        },
+        {
+            "title": "数列极限3",
+            "content": "数列{an}满足an+1=√(2+an)，a1=2，则an的极限是？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "极限",
+            "options": ["1", "2", "3", "4"],
+            "correct_answer": "2",
+            "explanation": "若极限存在为a，则a=√(2+a)，解得a=2"
+        },
+        {
+            "title": "向量运算3",
+            "content": "空间中两个向量a,b满足|a×b|=6，|a|=2，|b|=4，则它们的夹角是？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "向量",
+            "options": ["30°", "45°", "60°", "90°"],
+            "correct_answer": "60°",
+            "explanation": "|a×b|=|a||b|sinθ，代入得6=8sinθ，所以θ=60°"
+        },
+        {
+            "title": "函数最值2",
+            "content": "函数f(x)=sinx+cosx在[0,2π]上的最大值是？",
+            "type": "选择题",
+            "difficulty": 3,
+            "topics": "导数,最值",
+            "options": ["1", "√2", "2", "3"],
+            "correct_answer": "√2",
+            "explanation": "f'(x)=cosx-sinx=0时x=π/4，代入得最大值为√2"
+        },
+        {
+            "title": "圆锥曲线3",
+            "content": "椭圆x²/16+y²/9=1的离心率是？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "圆锥曲线",
+            "options": ["3/4", "4/5", "5/6", "7/8"],
+            "correct_answer": "5/6",
+            "explanation": "e=√(1-b²/a²)=√(1-9/16)=5/6"
+        },
+        {
+            "title": "微分方程2",
+            "content": "微分方程y'+y=e^x的通解是？",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "微分方程",
+            "options": ["Ce^x", "xe^x", "Ce^x+xe^x", "(C+x)e^x"],
+            "correct_answer": "(C+x)e^x",
+            "explanation": "设y=ue^x，代入原方程解得u=x+C"
+        },
+        {
+            "title": "立体几何3",
+            "content": "正六面体中，一个顶点到其它所有顶点的距离之和是？（设棱长为a）",
+            "type": "选择题",
+            "difficulty": 4,
+            "topics": "立体几何",
+            "options": ["(3+3√2+√3)a", "(4+3√2+√3)a", "(5+3√2+√3)a", "(6+3√2+√3)a"],
+            "correct_answer": "(3+3√2+√3)a",
+            "explanation": "3个距离为a，3个距离为a√2，1个距离为a√3"
+        },
+        {
+            "title": "数列3",
+            "content": "斐波那契数列的前6项是？",
+            "type": "选择题",
+            "difficulty": 2,
+            "topics": "数列",
+            "options": ["1,1,2,3,5,8", "1,2,3,5,8,13", "0,1,1,2,3,5", "2,3,5,8,13,21"],
+            "correct_answer": "1,1,2,3,5,8",
+            "explanation": "每一项是前两项之和"
+        },
+        {
+            "title": "复数运算4",
+            "content": "复数1+i的四次方是？",
+            "type": "选择题",
+            "difficulty": 3,
+            "topics": "复数",
+            "options": ["2+2i", "-4", "4", "4i"],
+            "correct_answer": "-4",
+            "explanation": "(1+i)²=2i，(2i)²=-4"
+        },
+        {
+            "title": "概率统计3",
+            "content": "掷两个骰子，两个数之积为12的概率是？",
+            "type": "选择题",
+            "difficulty": 3,
+            "topics": "概率统计",
+            "options": ["1/9", "1/6", "5/36", "1/4"],
+            "correct_answer": "5/36",
+            "explanation": "积为12的组合有(2,6),(3,4),(4,3),(6,2)共4种，概率为4/36=1/9"
         }
     ]
 } 

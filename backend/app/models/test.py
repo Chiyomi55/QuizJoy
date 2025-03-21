@@ -5,16 +5,17 @@ class Test(db.Model):
     __tablename__ = 'tests'  # 明确指定表名为 tests
     
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(200), nullable=False)
+    title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
     type = db.Column(db.String(50), nullable=False)  # '练习测试' 或 '正式测试'
     total_questions = db.Column(db.Integer, nullable=False)
     estimated_time = db.Column(db.Integer, nullable=False)  # 预计完成时间（分钟）
     topics = db.Column(db.String(200))  # 知识点，存储为逗号分隔的字符串
     difficulty = db.Column(db.Integer, nullable=False)  # 1-5星难度
-    problem_ids = db.Column(db.Text, nullable=False)  # 题目ID列表，存储为逗号分隔的字符串
+    problem_ids = db.Column(db.String(500))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     deadline = db.Column(db.DateTime)  # 截止时间（可选）
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def to_dict(self):
         return {
@@ -26,9 +27,10 @@ class Test(db.Model):
             'estimated_time': self.estimated_time,
             'topics': self.topics.split(',') if self.topics else [],
             'difficulty': self.difficulty,
-            'problem_ids': [int(x) for x in self.problem_ids.split(',')],
+            'problem_ids': [int(pid) for pid in self.problem_ids.split(',')] if self.problem_ids else [],
             'created_at': self.created_at.isoformat() if self.created_at else None,
-            'deadline': self.deadline.isoformat() if self.deadline else None
+            'deadline': self.deadline.isoformat() if self.deadline else None,
+            'created_by': self.created_by
         }
 
 class TestQuestion(db.Model):

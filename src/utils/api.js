@@ -14,7 +14,8 @@ export async function fetchWithAuth(endpoint, options = {}) {
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
-    headers
+    headers,
+    credentials: 'same-origin'
   });
 
   if (response.status === 401) {

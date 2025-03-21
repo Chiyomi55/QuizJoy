@@ -4,12 +4,13 @@ import { BsCamera } from 'react-icons/bs';
 import ReactCalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 import { fetchWithAuth } from '../utils/fetchWithAuth';
-import { Card, Avatar, List, Statistic, Row, Col, Spin, message, Button, Upload } from 'antd';
-import { UserOutlined, TrophyOutlined, BookOutlined, EditOutlined } from '@ant-design/icons';
+import { Card, Avatar, List, Statistic, Row, Col, Spin, message } from 'antd';
+import { UserOutlined, TrophyOutlined, BookOutlined } from '@ant-design/icons';
 import { Radar, Pie } from '@ant-design/plots';
 
 function ProfilePage({ user, onLogin }) {
-  const [isEditing, setIsEditing] = useState(false);
+  // 状态管理
+  const [isEditing, setIsEditing] = useState(false);  // 控制个人信息是否处于编辑状态
   const [userInfo, setUserInfo] = useState({
     nickname: '',
     school: '',
@@ -17,23 +18,24 @@ function ProfilePage({ user, onLogin }) {
     achievements: [],
     subject: '',
     title: '',
-    streak_days: 0
+    streak_days: 0,
+    avatar_url: 'https://file.302.ai/gpt/imgs/20250121/7f0cde4d3b0541598dab4244058bb566.jpeg'  // 添加默认头像
   });
-  const [activityData, setActivityData] = useState([]);
-  const [knowledgeStatus, setKnowledgeStatus] = useState([]);
-  const [difficultyDistribution, setDifficultyDistribution] = useState([]);
-  const fileInputRef = useRef(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [activityData, setActivityData] = useState([]);  // 活动数据，用于热力图显示
+  const [knowledgeStatus, setKnowledgeStatus] = useState([]);  // 知识点掌握状态
+  const [difficultyDistribution, setDifficultyDistribution] = useState([]);  // 难度分布数据
+  const fileInputRef = useRef(null);  // 文件上传的引用
+  const [loading, setLoading] = useState(true);  // 加载状态
+  const [error, setError] = useState(null);  // 错误状态
 
+  // 在组件加载时获取数据
   useEffect(() => {
     const fetchAllData = async () => {
       try {
         setLoading(true);
         setError(null);
         
-        // 并行获取所有数据
+        // 并行获取所有数据以提高加载速度
         const [userInfoResponse, activityResponse, knowledgeResponse, difficultyResponse] = await Promise.all([
           fetchWithAuth('/api/profile/info'),
           fetchWithAuth('/api/profile/activity'),
@@ -41,41 +43,47 @@ function ProfilePage({ user, onLogin }) {
           fetchWithAuth('/api/profile/difficulty_distribution')
         ]);
 
-        // 处理用户信息
+        // 处理用户信息响应
         if (userInfoResponse.ok) {
           const userData = await userInfoResponse.json();
-          const updatedUserInfo = {
+          setUserInfo({
             nickname: userData.nickname || user.nickname || '',
             school: userData.school || '',
             class: userData.grade || '',
             subject: userData.subject || '',
             title: userData.title || '',
             achievements: userData.achievements || [],
-            streak_days: userData.streak_days || 0
-          };
-          setUserInfo(updatedUserInfo);
+            streak_days: userData.streak_days || 0,
+            avatar_url: userData.avatar_url || 'https://file.302.ai/gpt/imgs/20250121/7f0cde4d3b0541598dab4244058bb566.jpeg'  // 如果后端没有返回头像，使用默认头像
+          });
         }
 
-        // 处理活动数据
+        // 处理活动数据响应
         if (activityResponse.ok) {
           const activityData = await activityResponse.json();
-          console.log('Activity data from server:', activityData); // 添加日志
           setActivityData(activityData.map(item => ({
             date: item.date,
             count: item.count
           })));
         }
 
-        // 处理知识点状态
+        // 处理知识点状态响应
         if (knowledgeResponse.ok) {
           const knowledgeData = await knowledgeResponse.json();
           setKnowledgeStatus(knowledgeData);
         }
 
-        // 处理难度分布
+        // 处理难度分布响应
         if (difficultyResponse.ok) {
           const difficultyData = await difficultyResponse.json();
-          setDifficultyDistribution(difficultyData);
+          console.log('Difficulty distribution data:', difficultyData);  // 添加日志
+          // 确保数据格式正确，如果为空则提供默认值
+          const formattedData = difficultyData.length > 0 ? difficultyData : [
+            { type: '简单', value: 0 },
+            { type: '中等', value: 0 },
+            { type: '困难', value: 0 }
+          ];
+          setDifficultyDistribution(formattedData);
         }
 
       } catch (error) {
@@ -194,7 +202,8 @@ function ProfilePage({ user, onLogin }) {
         school: updatedUser.school || '',
         class: updatedUser.grade || '',  // 使用后端返回的 grade 字段
         achievements: updatedUser.achievements || [],
-        streak_days: updatedUser.streak_days || 0
+        streak_days: updatedUser.streak_days || 0,
+        avatar_url: updatedUser.avatar_url || 'https://file.302.ai/gpt/imgs/20250121/7f0cde4d3b0541598dab4244058bb566.jpeg'  // 如果后端没有返回头像，使用默认头像
       });
       
       setIsEditing(false);
@@ -248,24 +257,24 @@ function ProfilePage({ user, onLogin }) {
     legend: false,
   };
 
+  // 难度分布图表的配置
   const pieConfig = {
     data: difficultyDistribution,
     angleField: 'value',
     colorField: 'type',
     radius: 0.8,
     innerRadius: 0.6,
-    color: ['#E8D4D4', '#F2A6A6', '#A5C9C4', '#D4E2D4', '#ECE3D4'],
+    color: ['#F2A6A6', '#CE93D8', '#A5C9C4', '#ECE3D4'],
+    appendPadding: 10,
     label: {
-      text: {
-        style: {
-          fontSize: 12,
-          textAlign: 'center',
-        },
-        content: (item) => {
-          if (!item || !item.percent) return '0%';
-          return `${(item.percent * 100).toFixed(0)}%`;
-        }
-      }
+      style: {
+        fontSize: 12,
+        fill: '#666',
+      },
+      formatter: (datum) => {
+        if (!datum?.percent) return '';
+        return `${datum.type}\n${(datum.percent * 100).toFixed(0)}%`;
+      },
     },
     legend: {
       position: 'bottom',
@@ -274,6 +283,7 @@ function ProfilePage({ user, onLogin }) {
     },
     tooltip: {
       formatter: (datum) => {
+        if (!datum?.type) return '';
         return `${datum.type}: ${datum.value}题`;
       }
     },
@@ -292,8 +302,8 @@ function ProfilePage({ user, onLogin }) {
           fontWeight: 'bold',
         },
         formatter: (_, data) => {
-          const total = data.reduce((sum, item) => sum + item.value, 0);
-          return total;
+          if (!data || !Array.isArray(data)) return 0;
+          return data.reduce((sum, item) => sum + (item?.value || 0), 0);
         }
       },
     },
@@ -304,188 +314,177 @@ function ProfilePage({ user, onLogin }) {
     ],
   };
 
-  const styles = {
-    profileInfo: {
-      padding: '24px',
-      background: '#fff',
-      borderRadius: '8px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-      width: '100%',
-      maxWidth: '300px',
-      margin: '0 auto'
-    },
-    userInfo: {
-      textAlign: 'center',
-      marginTop: '16px'
-    },
-    userInfoTitle: {
-      margin: '0 0 8px',
-      fontSize: '20px',
-      fontWeight: 'bold'
-    },
-    userInfoText: {
-      margin: '4px 0',
-      color: '#666'
-    },
-    studyStats: {
-      marginTop: '24px',
-      padding: '16px',
-      background: '#f5f5f5',
-      borderRadius: '8px'
-    },
-    statItem: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      marginBottom: '8px'
-    },
-    statLabel: {
-      color: '#666'
-    },
-    statValue: {
-      fontWeight: 'bold',
-      color: '#1890ff'
-    },
-    achievements: {
-      marginTop: '24px'
-    },
-    achievementsTitle: {
-      marginBottom: '16px',
-      fontSize: '16px',
-      fontWeight: 'bold'
-    },
-    achievementList: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '8px'
-    },
-    achievementItem: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '8px',
-      padding: '8px',
-      background: '#f5f5f5',
-      borderRadius: '4px'
-    },
-    achievementIcon: {
-      color: '#ffd700',
-      fontSize: '16px'
-    }
-  };
-
   return (
     <div className="profile-container">
-      <div className="profile-left">
-        <div className="profile-info">
-          <div className="avatar-container">
-            <Avatar size={120} src={userInfo.avatar} />
-            <Upload
-              showUploadList={false}
-              beforeUpload={handleImageUpload}
-              accept="image/*"
-              className="avatar-upload"
-            >
-              <Button icon={<EditOutlined />} size="small" className="avatar-edit-btn">
-                更换头像
-              </Button>
-            </Upload>
-          </div>
-          <div style={styles.userInfo}>
-            <h2 style={styles.userInfoTitle}>{userInfo.nickname}</h2>
-            <p style={styles.userInfoText}>{userInfo.school}</p>
-            <p style={styles.userInfoText}>{userInfo.class}</p>
-          </div>
-          <Button 
-            type="primary" 
-            icon={<EditOutlined />} 
-            onClick={() => setEditModalVisible(true)}
-            style={{ marginTop: '16px', width: '100%' }}
-          >
-            修改信息
-          </Button>
-          <div style={styles.studyStats}>
-            <div style={styles.statItem}>
-              <span style={styles.statLabel}>连续做题</span>
-              <span style={styles.statValue}>{userInfo.streak_days}天</span>
-            </div>
-            <div style={styles.statItem}>
-              <span style={styles.statLabel}>总做题数</span>
-              <span style={styles.statValue}>{activityData.reduce((sum, item) => sum + item.count, 0)}</span>
-            </div>
-          </div>
-          <div style={styles.achievements}>
-            <h3 style={styles.achievementsTitle}>成就</h3>
-            <div style={styles.achievementList}>
-              {userInfo.achievements.map(achievement => (
-                <div key={achievement} style={styles.achievementItem}>
-                  <TrophyOutlined style={styles.achievementIcon} />
-                  <span>{achievement}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="profile-right">
-        <Card className="activity-card" style={{ marginBottom: '16px' }}>
-          <h3>学习热力图</h3>
-          <div className="activity-heatmap">
-            {console.log('Rendering heatmap with data:', activityData)}
-            <ReactCalendarHeatmap
-              values={activityData}
-              startDate={new Date(new Date().setDate(new Date().getDate() - 180))}
-              endDate={new Date()}
-              classForValue={value => {
-                console.log('classForValue called with:', value);
-                if (!value) return 'color-empty';
-                if (value.count <= 2) return 'color-scale-1';
-                if (value.count <= 4) return 'color-scale-2';
-                if (value.count <= 6) return 'color-scale-3';
-                return 'color-scale-4';
-              }}
-              titleForValue={value => {
-                if (!value) return '没有提交';
-                return `${value.date}: ${value.count} 次提交`;
-              }}
-              tooltipDataAttrs={value => {
-                if (!value) return { 'data-tip': '没有提交' };
-                return {
-                  'data-tip': `${value.date}: ${value.count} 次提交`
-                };
-              }}
-              showWeekdayLabels={false}
-              monthLabels={['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']}
-            />
-            <div className="activity-legend">
-              <span>活跃度：</span>
-              <span className="legend-item">低</span>
-              <span className="legend-box scale-1"></span>
-              <span className="legend-box scale-2"></span>
-              <span className="legend-box scale-3"></span>
-              <span className="legend-box scale-4"></span>
-              <span className="legend-item">高</span>
-            </div>
-          </div>
-        </Card>
+      <h1 className="profile-title">个人学习档案</h1>
+      <Row gutter={24}>
+        {/* 左侧个人信息栏 - 使用6个栅格单位（总宽度的1/4） */}
+        <Col span={6}>
+          <Card className="profile-card">
+            <div className="profile-content">
+              {/* 头像部分 */}
+              <div className="avatar-section">
+                <Avatar 
+                  size={100}  // 控制头像大小
+                  icon={<UserOutlined />} 
+                  src={userInfo.avatar_url}
+                  className="profile-avatar"
+                />
+              </div>
 
-        <Row gutter={16}>
-          <Col span={12}>
-            <Card className="knowledge-card" styles={{ body: { height: '300px' } }}>
-              <h3>知识点掌握度</h3>
-              <div style={{ height: '250px' }}>
-                <Radar {...radarConfig} />
+              {/* 个人信息部分 */}
+              <div className="info-section">
+                {isEditing ? (
+                  // 编辑表单
+                  <div className="edit-form">
+                    <div className="form-item">
+                      <input
+                        type="text"
+                        value={userInfo.nickname}
+                        onChange={(e) => setUserInfo({...userInfo, nickname: e.target.value})}
+                        placeholder="昵称"
+                        className="edit-input"
+                      />
+                    </div>
+                    <div className="form-item">
+                      <input
+                        type="text"
+                        value={userInfo.school}
+                        onChange={(e) => setUserInfo({...userInfo, school: e.target.value})}
+                        placeholder="学校"
+                        className="edit-input"
+                      />
+                    </div>
+                    <div className="form-item">
+                      <input
+                        type="text"
+                        value={userInfo.class}
+                        onChange={(e) => setUserInfo({...userInfo, class: e.target.value})}
+                        placeholder="班级"
+                        className="edit-input"
+                      />
+                    </div>
+                    <div className="edit-buttons">
+                      <button onClick={handleSave} className="save-btn">保存</button>
+                      <button onClick={() => setIsEditing(false)} className="cancel-btn">取消</button>
+                    </div>
+                  </div>
+                ) : (
+                  // 信息展示
+                  <div className="info-display">
+                    <div className="info-item">
+                      <label>昵称</label>
+                      <span>{userInfo.nickname || user.nickname || '未设置昵称'}</span>
+                    </div>
+                    <div className="info-item">
+                      <label>学校</label>
+                      <span>{userInfo.school || '未设置学校'}</span>
+                    </div>
+                    <div className="info-item">
+                      <label>班级</label>
+                      <span>{userInfo.class || '未设置班级'}</span>
+                    </div>
+                  </div>
+                )}
               </div>
-            </Card>
-          </Col>
-          <Col span={12}>
-            <Card className="score-card" styles={{ body: { height: '300px' } }}>
-              <h3>难度分布</h3>
-              <div style={{ height: '250px' }}>
-                <Pie {...pieConfig} />
+
+              {/* 编辑按钮 - 放在个人信息之后，统计信息之前 */}
+              {!isEditing && (
+                <button onClick={() => setIsEditing(true)} className="edit-profile-btn">
+                  编辑个人资料
+                </button>
+              )}
+
+              {/* 统计信息部分 */}
+              <div className="profile-stats">
+                <Statistic title="总做题数" value={activityData.reduce((sum, item) => sum + item.count, 0)} />
+                <Statistic title="连续做题" value={userInfo.streak_days || 0} suffix="天" />
               </div>
-            </Card>
-          </Col>
-        </Row>
-      </div>
+
+              {/* 成就部分 - 使用固定高度和滚动条控制长度 */}
+              <div className="achievements-section" style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                <h3><TrophyOutlined /> 成就</h3>
+                <List
+                  size="small"
+                  dataSource={userInfo.achievements || []}
+                  renderItem={item => (
+                    <List.Item>
+                      <List.Item.Meta
+                        title={item}
+                      />
+                    </List.Item>
+                  )}
+                />
+              </div>
+            </div>
+          </Card>
+        </Col>
+        
+        {/* 右侧内容区 - 使用18个栅格单位（总宽度的3/4） */}
+        <Col span={18}>
+          <Card className="activity-card" style={{ marginBottom: '16px' }}>
+            <h3>学习热力图</h3>
+            <div className="activity-heatmap">
+              {console.log('Rendering heatmap with data:', activityData)}
+              <ReactCalendarHeatmap
+                values={activityData}
+                startDate={new Date(new Date().setDate(new Date().getDate() - 180))}
+                endDate={new Date()}
+                classForValue={value => {
+                  if (value) {
+                    console.log('Activity data for date:', value.date, value.count);
+                  }
+                  if (!value) return 'color-empty';
+                  if (value.count <= 2) return 'color-scale-1';
+                  if (value.count <= 4) return 'color-scale-2';
+                  if (value.count <= 6) return 'color-scale-3';
+                  return 'color-scale-4';
+                }}
+                titleForValue={value => {
+                  if (!value) return '没有提交';
+                  return `${value.date}: ${value.count} 次提交`;
+                }}
+                tooltipDataAttrs={value => {
+                  if (!value) return { 'data-tip': '没有提交' };
+                  return {
+                    'data-tip': `${value.date}: ${value.count} 次提交`
+                  };
+                }}
+                showWeekdayLabels={false}
+                monthLabels={['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']}
+              />
+              <div className="activity-legend">
+                <span>活跃度：</span>
+                <span className="legend-item">低</span>
+                <span className="legend-box scale-1"></span>
+                <span className="legend-box scale-2"></span>
+                <span className="legend-box scale-3"></span>
+                <span className="legend-box scale-4"></span>
+                <span className="legend-item">高</span>
+              </div>
+            </div>
+          </Card>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Card className="knowledge-card" styles={{ body: { height: '300px' } }}>
+                <h3>知识点掌握度</h3>
+                <div style={{ height: '250px' }}>
+                  <Radar {...radarConfig} />
+                </div>
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card className="score-card" styles={{ body: { height: '300px' } }}>
+                <h3>难度分布</h3>
+                <div style={{ height: '250px' }}>
+                  <Pie {...pieConfig} />
+                </div>
+              </Card>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
     </div>
   );
 }

@@ -85,6 +85,56 @@
             "problem_ids": [58, 59, 60, 61, 62, 63, 64, 65, 66, 67],
             "type": "练习测试",
             "created_at": "2024-03-12T15:00:00Z"
+        },
+        {
+            "id": 8,
+            "title": "圆锥曲线综合测试",
+            "description": "本测试全面考察圆锥曲线的性质和应用",
+            "total_questions": 10,
+            "estimated_time": 45,
+            "topics": ["圆锥曲线", "解析几何", "函数", "几何", "向量"],
+            "difficulty": 4,
+            "problem_ids": [68, 69, 70, 71, 72, 73, 74, 75, 76, 77],
+            "type": "练习测试",
+            "created_at": "2024-03-13T10:00:00Z"
+        },
+        {
+            "id": 9,
+            "title": "高等数学基础测试",
+            "description": "本测试涵盖微积分、极限和微分方程的核心知识",
+            "total_questions": 12,
+            "estimated_time": 60,
+            "topics": ["微分方程", "极限", "导数", "函数", "数列"],
+            "difficulty": 5,
+            "problem_ids": [78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89],
+            "type": "正式测试",
+            "created_at": "2024-03-13T11:00:00Z",
+            "deadline": "2024-03-20T23:59:59Z"
+        },
+        {
+            "id": 10,
+            "title": "空间向量与立体几何测试",
+            "description": "本测试重点考察空间向量运算和立体几何问题",
+            "total_questions": 8,
+            "estimated_time": 40,
+            "topics": ["空间向量", "立体几何", "几何证明", "解析几何"],
+            "difficulty": 4,
+            "problem_ids": [90, 91, 92, 93, 94, 95, 96, 97],
+            "type": "练习测试",
+            "created_at": "2024-03-13T14:00:00Z"
+        },
+        {
+            "id": 11,
+            "title": "数学综合能力测试",
+            "description": "本测试全面考察数学各个领域的综合应用能力",
+            "total_questions": 15,
+            "estimated_time": 90,
+            "topics": ["函数", "数列", "概率统计", "几何", "代数"],
+            "difficulty": 4,
+            "problem_ids": [98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112],
+            "type": "正式测试",
+            "created_at": "2024-03-13T15:00:00Z",
+            "deadline": "2024-03-20T23:59:59Z"
         }
     ]
 } 

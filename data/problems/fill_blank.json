@@ -252,6 +252,204 @@
             "topics": "数列",
             "correct_answer": "1",
             "explanation": "Sn=n(a1+an)/2=5(1+a5)/2=15，解得a5=5，所以公差为1"
+        },
+        {
+            "title": "数列求和2",
+            "content": "等差数列前10项和为550，末项为100，求首项。",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "数列,求和",
+            "correct_answer": "10",
+            "explanation": "设首项为a，公差为d，则a+99=100，且10a+45d=550，解得a=10"
+        },
+        {
+            "title": "三角函数值2",
+            "content": "已知sin x = 0.6，x在第一象限，求cos x的值。",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "三角函数",
+            "correct_answer": "0.8",
+            "explanation": "根据sin²x + cos²x = 1，得cos x = √(1-0.6²) = 0.8"
+        },
+        {
+            "title": "立体几何2",
+            "content": "正方体的表面积为24平方厘米，求其体积。",
+            "type": "填空题",
+            "difficulty": 2,
+            "topics": "立体几何",
+            "correct_answer": "8",
+            "explanation": "设边长为a，则6a²=24，a=2，体积为8"
+        },
+        {
+            "title": "概率统计2",
+            "content": "袋中有3红2白球，取2球，取到2红球的概率是多少？",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "概率统计",
+            "correct_answer": "0.3",
+            "explanation": "C(3,2)/C(5,2)=3/10=0.3"
+        },
+        {
+            "title": "导数应用2",
+            "content": "函数f(x)=x²-2x+1的最小值是多少？",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "导数,最值",
+            "correct_answer": "0",
+            "explanation": "f'(x)=2x-2=0，解得x=1，代入得最小值为0"
+        },
+        {
+            "title": "复数运算2",
+            "content": "若i为虚数单位，求(1+i)⁴的虚部。",
+            "type": "填空题",
+            "difficulty": 4,
+            "topics": "复数",
+            "correct_answer": "0",
+            "explanation": "(1+i)⁴=((1+i)²)²=(2i)²=-4"
+        },
+        {
+            "title": "空间向量2",
+            "content": "已知向量a=(2,0,0),b=(0,3,0),求|a×b|。",
+            "type": "填空题",
+            "difficulty": 4,
+            "topics": "空间向量",
+            "correct_answer": "6",
+            "explanation": "叉积的模等于|a||b|sinθ=2×3×1=6"
+        },
+        {
+            "title": "圆锥曲线2",
+            "content": "椭圆x²/4+y²/9=1的离心率是多少？",
+            "type": "填空题",
+            "difficulty": 4,
+            "topics": "圆锥曲线",
+            "correct_answer": "√5/3",
+            "explanation": "e=√(1-b²/a²)=√(1-4/9)=√5/3"
+        },
+        {
+            "title": "数列极限2",
+            "content": "求lim(n→∞)(n²+1)/(n²+2n)的值。",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "数列,极限",
+            "correct_answer": "1",
+            "explanation": "分子分母同除n²，得到(1+1/n²)/(1+2/n)，极限为1"
+        },
+        {
+            "title": "微分方程2",
+            "content": "求微分方程y'+2y=0的通解。",
+            "type": "填空题",
+            "difficulty": 4,
+            "topics": "微分方程",
+            "correct_answer": "Ce^(-2x)",
+            "explanation": "分离变量法解得y=Ce^(-2x)"
+        },
+        {
+            "title": "立体几何3",
+            "content": "圆柱的底面半径为2，高为3，求其体积。",
+            "type": "填空题",
+            "difficulty": 2,
+            "topics": "立体几何",
+            "correct_answer": "12π",
+            "explanation": "V=πr²h=π×4×3=12π"
+        },
+        {
+            "title": "三角函数3",
+            "content": "tan(π/6)的值等于多少？",
+            "type": "填空题",
+            "difficulty": 2,
+            "topics": "三角函数",
+            "correct_answer": "1/√3",
+            "explanation": "tan(π/6)=sin(π/6)/cos(π/6)=(1/2)/(√3/2)=1/√3"
+        },
+        {
+            "title": "概率统计3",
+            "content": "掷两枚骰子，和为8的概率是多少？",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "概率统计",
+            "correct_answer": "5/36",
+            "explanation": "和为8的组合有5种，总共36种可能"
+        },
+        {
+            "title": "数列3",
+            "content": "等比数列前3项和为14，公比为2，求首项。",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "数列",
+            "correct_answer": "2",
+            "explanation": "设首项为a，则a+2a+4a=14，解得a=2"
+        },
+        {
+            "title": "向量运算2",
+            "content": "向量a=(1,2),b=(2,4)，求它们的夹角（用度数表示）。",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "向量",
+            "correct_answer": "0",
+            "explanation": "两向量平行，夹角为0度"
+        },
+        {
+            "title": "函数极值2",
+            "content": "函数f(x)=x³-3x在[-2,2]上的最大值是多少？",
+            "type": "填空题",
+            "difficulty": 4,
+            "topics": "函数,最值",
+            "correct_answer": "4",
+            "explanation": "f'(x)=3x²-3=3(x²-1)，代入驻点和端点比较"
+        },
+        {
+            "title": "圆锥曲线3",
+            "content": "双曲线x²/4-y²/9=1的实轴长是多少？",
+            "type": "填空题",
+            "difficulty": 4,
+            "topics": "圆锥曲线",
+            "correct_answer": "4",
+            "explanation": "实轴长为2a，其中a=2"
+        },
+        {
+            "title": "立体几何4",
+            "content": "正八面体的体积为1，求其棱长。",
+            "type": "填空题",
+            "difficulty": 5,
+            "topics": "立体几何",
+            "correct_answer": "√6/2",
+            "explanation": "正八面体体积V=(√2/3)a³，其中a为棱长，解得a=√6/2"
+        },
+        {
+            "title": "数列4",
+            "content": "斐波那契数列的第8项是多少？（第1项为1，第2项为1）",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "数列",
+            "correct_answer": "21",
+            "explanation": "1,1,2,3,5,8,13,21"
+        },
+        {
+            "title": "复数运算3",
+            "content": "i的100次方等于多少？",
+            "type": "填空题",
+            "difficulty": 2,
+            "topics": "复数",
+            "correct_answer": "1",
+            "explanation": "i的4次方为1，100÷4余数为0，所以结果为1"
+        },
+        {
+            "title": "概率统计4",
+            "content": "抛3枚硬币，恰好出现2个正面的概率是多少？",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "概率统计",
+            "correct_answer": "3/8",
+            "explanation": "C(3,2)×(1/2)³=3/8"
+        },
+        {
+            "title": "三角函数4",
+            "content": "sin(π/4)+cos(π/4)的值等于多少？",
+            "type": "填空题",
+            "difficulty": 3,
+            "topics": "三角函数",
+            "correct_answer": "√2",
+            "explanation": "sin(π/4)=cos(π/4)=1/√2，和为√2"
         }
     ]
 } 

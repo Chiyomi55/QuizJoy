@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from app.models import db, User
 from flask_jwt_extended import create_access_token, JWTManager, jwt_required, get_jwt_identity
 
-# 创建认证蓝图,设置URL前缀
+# 创建认证蓝图
 bp = Blueprint('auth', __name__, url_prefix='/api/auth')
 
 @bp.route('/login', methods=['POST', 'OPTIONS'])

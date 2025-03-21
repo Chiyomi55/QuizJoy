@@ -14,7 +14,10 @@ function CreateTest() {
     title: '',
     type: '月测',
     deadline: '',
-    difficulty: 3
+    difficulty: 3,
+    description: '',
+    estimatedTime: 60,
+    topics: []
   });
 
   const [selectedQuestions, setSelectedQuestions] = useState([]);
@@ -111,7 +114,10 @@ function CreateTest() {
           questions: selectedQuestions.map(q => ({
             problemId: q.id,
             order: q.order
-          }))
+          })),
+          description: testInfo.description,
+          estimatedTime: testInfo.estimatedTime,
+          topics: testInfo.topics
         })
       });
 
@@ -147,6 +153,15 @@ function CreateTest() {
               placeholder="请输入小测名称"
             />
           </div>
+          <div className="form-group full-width">
+            <label>测试描述</label>
+            <textarea
+              value={testInfo.description}
+              onChange={(e) => setTestInfo({...testInfo, description: e.target.value})}
+              placeholder="请输入测试描述"
+              rows={4}
+            />
+          </div>
           <div className="form-row">
             <div className="form-group">
               <label>类型</label>
@@ -169,16 +184,54 @@ function CreateTest() {
               />
             </div>
           </div>
-          <div className="form-group difficulty-group">
-            <label>难度设置</label>
-            <div className="difficulty-stars">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <span
-                  key={star}
-                  onClick={() => setTestInfo({...testInfo, difficulty: star})}
-                >
-                  {star <= testInfo.difficulty ? <FaStar /> : <FaRegStar />}
-                </span>
+          <div className="form-row">
+            <div className="form-group">
+              <label>预计完成时间（分钟）</label>
+              <input
+                type="number"
+                min="1"
+                value={testInfo.estimatedTime}
+                onChange={(e) => setTestInfo({...testInfo, estimatedTime: parseInt(e.target.value)})}
+              />
+            </div>
+            <div className="form-group difficulty-group">
+              <label>难度设置</label>
+              <div className="difficulty-stars">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    onClick={() => setTestInfo({...testInfo, difficulty: star})}
+                  >
+                    {star <= testInfo.difficulty ? <FaStar /> : <FaRegStar />}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="form-group full-width">
+            <label>相关知识点</label>
+            <div className="topics-selection">
+              {allTopics.filter(topic => topic !== '全部').map(topic => (
+                <label key={topic} className="topic-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={testInfo.topics.includes(topic)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setTestInfo({
+                          ...testInfo,
+                          topics: [...testInfo.topics, topic]
+                        });
+                      } else {
+                        setTestInfo({
+                          ...testInfo,
+                          topics: testInfo.topics.filter(t => t !== topic)
+                        });
+                      }
+                    }}
+                  />
+                  {topic}
+                </label>
               ))}
             </div>
           </div>

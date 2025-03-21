@@ -34,7 +34,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
           password: formData.password,
           role: userType
         }),
-        credentials: 'include'
+        credentials: 'same-origin'
       });
 
       console.log('收到响应:', {

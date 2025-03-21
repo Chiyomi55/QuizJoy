@@ -517,9 +517,12 @@
   font-size: 14px;
 }
 
-/* 左侧卡片样式 */
+/* 左侧个人信息卡片样式 */
 .profile-card {
-  height: 100%;
+  height: 100%;  /* 卡片高度撑满容器 */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .profile-header {
@@ -653,17 +656,20 @@
   box-shadow: 0 4px 12px rgba(242, 166, 166, 0.2) !important;
 }
 
+/* 个人信息区域样式 */
 .info-section {
   width: 100%;
   margin-bottom: 24px;
 }
 
+/* 信息显示布局 */
 .info-display {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+/* 单个信息项样式 */
 .info-item {
   text-align: center;
   padding: 12px;
@@ -752,6 +758,7 @@
   transform: translateY(-2px);
 }
 
+/* 编辑按钮样式 */
 .edit-profile-btn {
   width: 100%;
   padding: 10px;
@@ -771,6 +778,7 @@
   box-shadow: 0 2px 8px rgba(242, 166, 166, 0.3);
 }
 
+/* 统计信息布局 */
 .profile-stats {
   width: 100%;
   display: grid;
@@ -779,6 +787,7 @@
   margin: 16px 0;
 }
 
+/* 成就部分样式 */
 .achievements-section {
   width: 100%;
   margin-top: 16px;
@@ -791,4 +800,13 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+/* 成就列表样式 */
+.achievements-section .ant-list {
+  font-size: 14px;  /* 减小字体大小 */
+}
+
+.achievements-section .ant-list-item {
+  padding: 8px 0;  /* 减小列表项内边距 */
 } 
