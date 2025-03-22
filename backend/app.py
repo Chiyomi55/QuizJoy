@@ -5,7 +5,6 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from routes.problems import problems
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 # 配置数据库
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'

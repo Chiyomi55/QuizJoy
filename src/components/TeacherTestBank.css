@@ -1,32 +1,42 @@
 .teacher-test-bank {
+  padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
 }
 
-/* 顶部操作栏样式 */
+/* 顶部操作区域样式 */
 .action-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
-  padding: 16px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  gap: 2rem;
 }
 
+.left-section {
+  flex-shrink: 0;
+}
+
+.right-section {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 创建按钮样式 */
 .create-test-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: var(--primary-color);
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--primary-color);
+  color: #333;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .create-test-btn:hover {
@@ -34,73 +44,336 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* 筛选器样式 */
 .filters {
   display: flex;
-  gap: 16px;
+  gap: 1rem;
+  align-items: center;
 }
 
-.filters select,
-.filters input {
-  padding: 8px 16px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 0.95rem;
+.filter-select {
+  padding: 0.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #333;
+  background-color: white;
+  min-width: 120px;
 }
 
-/* 小测卡片样式 */
-.test-card {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
+/* 搜索框样式 */
+.search-box {
+  position: relative;
+  width: 250px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
 }
 
-.test-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.search-box input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
 }
 
-.test-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.test-info {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.test-type {
-  display: inline-block;
-  padding: 4px 12px;
-  background: var(--primary-color);
-  border-radius: 12px;
-  font-size: 0.85rem;
-}
-
-.deadline {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #666;
+.search-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
   font-size: 0.9rem;
 }
 
-.completion-status {
-  display: flex;
-  gap: 24px;
+/* 莫兰迪色系变量 */
+:root {
+    --primary: #F2A6A6;    /* 主色调（粉色）*/
+    --secondary: #F7D1D1;  /* 浅粉色 */
+    --accent: #E6D5D5;     /* 灰粉色 */
+    --background: #FDF6F6; /* 背景色（浅粉白）*/
+    --text: #5C5757;       /* 文字色 */
+    --completed: #E8CFCF;  /* 已完成色 */
+    --button: #F2A6A6;     /* 按钮色 */
+    --button-hover: #F7B8B8; /* 按钮悬浮色 */
+    --star: #FFB800;      /* 星星颜色 */
 }
 
-.status-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* 测试卡片网格布局 */
+.test-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 24px;
+    padding: 24px;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+/* 测试卡片基础样式 */
+.test-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+}
+
+.test-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 卡片头部样式 */
+.test-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+/* 测试类型标签 */
+.test-type {
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: var(--secondary);
+    color: var(--text);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* 创建日期样式 */
+.test-date {
+    font-size: 0.8rem;
+    color: var(--text);
+    opacity: 0.8;
+}
+
+/* 主要内容区域 */
+.test-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+}
+
+/* 标题和基本信息布局 */
+.test-main-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 测试标题样式 */
+.test-title {
+    margin: 0;
+    color: var(--text);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+/* 基本信息组样式 */
+.test-info {
+    display: flex;
+    gap: 16px;
+    color: var(--text);
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+/* 单个信息项样式 */
+.test-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* 难度星星样式 */
+.test-stat .difficulty {
+    color: var(--star);
+    font-size: 16px;
+    letter-spacing: -1px;
+}
+
+/* 知识点标签组 */
+.test-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: auto;
+}
+
+/* 知识点标签样式 */
+.topic-tag {
+    padding: 4px 12px;
+    background-color: var(--accent);
+    color: var(--text);
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+/* 更多知识点提示 */
+.topic-more {
+    padding: 4px 12px;
+    background-color: var(--background);
+    color: var(--text);
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+/* 底部状态区域 */
+.test-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid var(--secondary);
+    margin-top: auto;
+}
+
+/* 完成情况信息组 */
+.completion-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+    font-size: 14px;
+}
+
+/* 进度条容器 */
+.completion-progress {
+    width: 80px;
+    height: 4px;
+    background-color: var(--secondary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* 进度条 */
+.progress-bar {
+    height: 100%;
+    background-color: var(--primary);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* 截止日期信息 */
+.deadline-info {
+    color: var(--text);
+    font-size: 14px;
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* 分析按钮 */
+.view-analysis {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 6px;
+    background-color: var(--button);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.view-analysis:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(242, 166, 166, 0.2);
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+    .test-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 16px;
+    }
+    
+    .test-card {
+        padding: 16px;
+        min-height: 240px;
+    }
+    
+    .test-title {
+        font-size: 16px;
+    }
+    
+    .view-analysis {
+        font-size: 13px;
+        padding: 4px 10px;
+    }
+}
+
+/* 无数据状态 */
+.no-tests {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.no-tests p {
   color: #666;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.no-tests button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--primary-color);
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.no-tests button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 加载和错误状态 */
+.loading,
+.error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+}
+
+.loading {
+  color: #666;
+}
+
+.error {
+  color: #ff4d4f;
+  background: #fff2f0;
+  border-radius: 8px;
+  margin-top: 1rem;
 }
 
 /* 统计数据样式 */

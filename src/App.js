@@ -47,6 +47,14 @@ function App() {
     };
 
     autoLogin();
+    
+    // 检查URL参数是否包含showLogin
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('showLogin') === 'true') {
+      setIsLoginModalOpen(true);
+      // 清除URL参数
+      window.history.replaceState({}, '', window.location.pathname);
+    }
   }, []);
 
   const handleLogin = (userData) => {

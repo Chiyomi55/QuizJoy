@@ -9,68 +9,47 @@ bp = Blueprint('problems', __name__, url_prefix='/api/problems')
 @bp.route('', methods=['GET'])
 @jwt_required()
 def get_problems():
-    """
-    获取题目列表
-    - 需要JWT认证
-    - 根据用户角色返回不同的题目信息
-    - 教师可以看到所有题目和详细信息
-    - 学生只能看到已发布的题目和基本信息
-    """
+    """获取所有题目列表"""
     try:
-        # 获取用户ID和角色
-        user_id = get_jwt_identity()
-        if not user_id:
-            return jsonify({'error': '未登录'}), 401
-            
-        user = User.query.get(user_id)
-        if not user:
-            return jsonify({'error': '用户不存在'}), 404
-            
-        is_teacher = user.role == 'teacher'
+        print("\n=== 开始处理获取题目列表请求 ===")
+        print("请求头:", dict(request.headers))
+        print("Authorization头:", request.headers.get('Authorization'))
         
-        # 查询题目
+        current_user_id = get_jwt_identity()
+        if not current_user_id:
+            print("未找到用户ID")
+            return jsonify({'error': '未找到用户信息'}), 401
+            
+        print(f"当前用户ID: {current_user_id}")
+        
+        # 获取所有题目
         problems = Problem.query.all()
+        print(f"从数据库查询到 {len(problems)} 个题目")
         
-        # 获取用户的做题状态（仅学生）
-        problem_statuses = {}
-        if not is_teacher:
-            problem_statuses = {
-                status.problem_id: status.status
-                for status in UserProblemStatus.query.filter_by(user_id=int(user_id)).all()
-            }
+        if not problems:
+            print("没有找到任何题目")
+            return jsonify([])
         
-        # 根据角色构建返回数据
-        result = []
-        for p in problems:
-            problem_data = {
-                'id': p.id,
-                'title': p.title,
-                'type': p.type,
-                'difficulty': p.difficulty,
-                'topics': p.topics.split(',') if p.topics else [],
-            }
-            
-            # 教师可以看到更多信息
-            if is_teacher:
-                problem_data.update({
-                    'options': json.loads(p.options) if p.options else [],
-                    'correct_answer': p.correct_answer,
-                    'explanation': p.explanation,
-                    'created_at': p.created_at.strftime('%Y-%m-%d %H:%M:%S') if p.created_at else None,
-                })
-            # 学生只能看到状态
-            else:
-                problem_data['status'] = problem_statuses.get(p.id, '未完成')
-            
-            result.append(problem_data)
+        result = [{
+            'id': problem.id,
+            'title': problem.title,
+            'content': problem.content,
+            'type': problem.type,
+            'difficulty': problem.difficulty,
+            'topics': problem.topics.split(',') if problem.topics else [],
+            'options': json.loads(problem.options) if problem.options else None
+        } for problem in problems]
         
+        print(f"返回 {len(result)} 个题目数据")
         return jsonify(result)
         
     except Exception as e:
+        print(f"\n!!! 获取题目列表时发生错误 !!!")
+        print(f"错误类型: {type(e).__name__}")
+        print(f"错误信息: {str(e)}")
         import traceback
-        print("Error details:")
-        print(traceback.format_exc())
-        return jsonify({'error': str(e)}), 500
+        print(f"错误堆栈:\n{traceback.format_exc()}")
+        return jsonify({'error': '获取题目列表失败', 'msg': str(e)}), 500
 
 @bp.route('/<int:problem_id>', methods=['GET'])
 def get_problem(problem_id):

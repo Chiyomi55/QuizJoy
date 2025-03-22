@@ -4,19 +4,16 @@ export async function fetchWithAuth(endpoint, options = {}) {
   const token = localStorage.getItem('token');
   console.log('🚀 发起请求:', `${API_BASE_URL}${endpoint}`);
   
+  // 基础请求头
   const headers = {
     'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    ...options.headers
+    'Accept': 'application/json'
   };
 
+  // 添加认证头
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
     console.log('✨ 使用token进行认证');
-  } else {
-    console.log('⚠️ 未找到token');
-    // 如果是获取题目列表等不需要强制登录的接口，可以继续请求
-    // 对于需要强制登录的接口，可以在具体业务代码中处理
   }
 
   try {
@@ -30,28 +27,29 @@ export async function fetchWithAuth(endpoint, options = {}) {
       headers: headers
     });
 
-    const response = await fetch(url, {
+    // 构建请求配置
+    const config = {
       ...options,
       headers,
-      mode: 'cors',
-      credentials: 'omit',
-      cache: 'no-cache'
-    });
+      credentials: 'include',
+      mode: 'cors'
+    };
 
+    const response = await fetch(url, config);
     console.log('📥 响应状态:', response.status);
 
     // 处理401未授权的情况
     if (response.status === 401) {
-      console.log('🔒 登录已过期，清除token');
+      console.log('🔒 登录已过期或未登录，清除token');
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/';
-      throw new Error('登录已过期，请重新登录');
+      window.location.href = '/?showLogin=true';
+      throw new Error('请先登录');
     }
 
     // 处理其他错误状态
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json().catch(() => ({}));
       console.error('❌ 请求失败:', errorData);
       throw new Error(errorData.error || errorData.msg || `请求失败 (${response.status})`);
     }
@@ -59,7 +57,6 @@ export async function fetchWithAuth(endpoint, options = {}) {
     return response;
   } catch (error) {
     console.error('❌ 请求异常:', error);
-    // 如果是网络错误，给出友好提示
     if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
       throw new Error('网络连接失败，请检查网络设置');
     }
@@ -67,7 +64,7 @@ export async function fetchWithAuth(endpoint, options = {}) {
   }
 }
 
-// 添加一些常用的API调用方法
+// API方法配置
 export const api = {
   // 题目相关
   problems: {
