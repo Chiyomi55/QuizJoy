@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './TeacherProfile.css';
 import { FaUserCircle, FaChalkboardTeacher, FaBook, FaChartBar, FaEdit, FaCheck, FaTimes } from 'react-icons/fa';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
-import { fetchWithAuth } from '../utils/fetchWithAuth';
+import { api } from '../utils/api';
 
 function TeacherProfile({ user }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -20,10 +20,10 @@ function TeacherProfile({ user }) {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await fetchWithAuth('/api/profile/info');
+        const response = await api.user.getProfile();
         if (response.ok) {
           const data = await response.json();
-          console.log('Fetched profile data:', data);
+          console.log('获取到的个人资料:', data);
           setProfileData({
             name: data.nickname || user.username,
             phone: data.phone || '',
@@ -42,7 +42,7 @@ function TeacherProfile({ user }) {
           });
         }
       } catch (error) {
-        console.error('Failed to fetch profile:', error);
+        console.error('获取个人资料失败:', error);
       }
     };
 
@@ -91,24 +91,18 @@ function TeacherProfile({ user }) {
 
   const handleEditSubmit = async () => {
     try {
-      const response = await fetchWithAuth('/api/profile/info', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          nickname: editData.name,
-          phone: editData.phone,
-          school: editData.school,
-          subject: editData.subject,
-          title: editData.title,
-          email: editData.email
-        })
+      const response = await api.user.updateProfile({
+        nickname: editData.name,
+        phone: editData.phone,
+        school: editData.school,
+        subject: editData.subject,
+        title: editData.title,
+        email: editData.email
       });
 
       if (response.ok) {
         const updatedData = await response.json();
-        console.log('Updated profile data:', updatedData);
+        console.log('更新后的个人资料:', updatedData);
         setProfileData({
           name: updatedData.nickname || user.username,
           phone: updatedData.phone || '',
@@ -118,12 +112,9 @@ function TeacherProfile({ user }) {
           email: updatedData.email || ''
         });
         setIsEditing(false);
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to update profile');
       }
     } catch (error) {
-      console.error('Failed to update profile:', error);
+      console.error('更新个人资料失败:', error);
       alert('更新失败，请重试');
     }
   };

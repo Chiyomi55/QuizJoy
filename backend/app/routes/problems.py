@@ -1,54 +1,68 @@
 from flask import Blueprint, jsonify, request
-from app.models import db, Problem, UserProblemStatus, DailyUserSubmission
+from app.models import db, Problem, UserProblemStatus, DailyUserSubmission, User
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
 import json
 
 bp = Blueprint('problems', __name__, url_prefix='/api/problems')
 
-@bp.route('/', methods=['GET', 'OPTIONS'])
+@bp.route('', methods=['GET'])
+@jwt_required()
 def get_problems():
     """
     获取题目列表
-    - 无需JWT认证
-    - 返回所有题目基本信息
-    - 如果用户已登录，包含用户的做题状态
+    - 需要JWT认证
+    - 根据用户角色返回不同的题目信息
+    - 教师可以看到所有题目和详细信息
+    - 学生只能看到已发布的题目和基本信息
     """
-    if request.method == 'OPTIONS':
-        return jsonify({}), 200
-        
     try:
-        # 查询所有题目
+        # 获取用户ID和角色
+        user_id = get_jwt_identity()
+        if not user_id:
+            return jsonify({'error': '未登录'}), 401
+            
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'error': '用户不存在'}), 404
+            
+        is_teacher = user.role == 'teacher'
+        
+        # 查询题目
         problems = Problem.query.all()
         
-        # 获取用户ID(如果已登录)
-        auth_header = request.headers.get('Authorization')
-        user_id = None
-        if auth_header and auth_header.startswith('Bearer '):
-            try:
-                token = auth_header.split(' ')[1]
-                user_id = get_jwt_identity()
-            except:
-                pass
-        
-        # 如果用户已登录，获取做题状态
+        # 获取用户的做题状态（仅学生）
         problem_statuses = {}
-        if user_id:
+        if not is_teacher:
             problem_statuses = {
                 status.problem_id: status.status
                 for status in UserProblemStatus.query.filter_by(user_id=int(user_id)).all()
             }
         
-        # 构建返回数据
-        result = [{
-            'id': p.id,
-            'title': p.title,
-            'type': p.type,
-            'difficulty': p.difficulty,
-            'topics': p.topics.split(',') if p.topics else [],
-            'options': json.loads(p.options) if p.options else [],
-            'status': problem_statuses.get(p.id, '未完成') if user_id else None
-        } for p in problems]
+        # 根据角色构建返回数据
+        result = []
+        for p in problems:
+            problem_data = {
+                'id': p.id,
+                'title': p.title,
+                'type': p.type,
+                'difficulty': p.difficulty,
+                'topics': p.topics.split(',') if p.topics else [],
+            }
+            
+            # 教师可以看到更多信息
+            if is_teacher:
+                problem_data.update({
+                    'options': json.loads(p.options) if p.options else [],
+                    'correct_answer': p.correct_answer,
+                    'explanation': p.explanation,
+                    'created_at': p.created_at.strftime('%Y-%m-%d %H:%M:%S') if p.created_at else None,
+                })
+            # 学生只能看到状态
+            else:
+                problem_data['status'] = problem_statuses.get(p.id, '未完成')
+            
+            result.append(problem_data)
         
         return jsonify(result)
         

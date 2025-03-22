@@ -3,7 +3,7 @@ import './ProfilePage.css';
 import { BsCamera } from 'react-icons/bs';
 import ReactCalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
-import { fetchWithAuth } from '../utils/fetchWithAuth';
+import { api } from '../utils/api';
 import { Card, Avatar, List, Statistic, Row, Col, Spin, message } from 'antd';
 import { UserOutlined, TrophyOutlined, BookOutlined } from '@ant-design/icons';
 import { Radar, Pie } from '@ant-design/plots';
@@ -37,10 +37,10 @@ function ProfilePage({ user, onLogin }) {
         
         // 并行获取所有数据以提高加载速度
         const [userInfoResponse, activityResponse, knowledgeResponse, difficultyResponse] = await Promise.all([
-          fetchWithAuth('/api/profile/info'),
-          fetchWithAuth('/api/profile/activity'),
-          fetchWithAuth('/api/profile/knowledge_status'),
-          fetchWithAuth('/api/profile/difficulty_distribution')
+          api.user.getProfile(),
+          api.user.getActivity(),
+          api.user.getKnowledgeStatus(),
+          api.user.getDifficultyDistribution()
         ]);
 
         // 处理用户信息响应
@@ -54,17 +54,14 @@ function ProfilePage({ user, onLogin }) {
             title: userData.title || '',
             achievements: userData.achievements || [],
             streak_days: userData.streak_days || 0,
-            avatar_url: userData.avatar_url || 'https://file.302.ai/gpt/imgs/20250121/7f0cde4d3b0541598dab4244058bb566.jpeg'  // 如果后端没有返回头像，使用默认头像
+            avatar_url: userData.avatar_url || 'https://file.302.ai/gpt/imgs/20250121/7f0cde4d3b0541598dab4244058bb566.jpeg'
           });
         }
 
         // 处理活动数据响应
         if (activityResponse.ok) {
           const activityData = await activityResponse.json();
-          setActivityData(activityData.map(item => ({
-            date: item.date,
-            count: item.count
-          })));
+          setActivityData(activityData);
         }
 
         // 处理知识点状态响应
@@ -76,19 +73,12 @@ function ProfilePage({ user, onLogin }) {
         // 处理难度分布响应
         if (difficultyResponse.ok) {
           const difficultyData = await difficultyResponse.json();
-          console.log('Difficulty distribution data:', difficultyData);  // 添加日志
-          // 确保数据格式正确，如果为空则提供默认值
-          const formattedData = difficultyData.length > 0 ? difficultyData : [
-            { type: '简单', value: 0 },
-            { type: '中等', value: 0 },
-            { type: '困难', value: 0 }
-          ];
-          setDifficultyDistribution(formattedData);
+          setDifficultyDistribution(difficultyData);
         }
 
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('数据加载失败，请刷新页面重试');
+      } catch (err) {
+        console.error('获取数据失败:', err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -96,8 +86,6 @@ function ProfilePage({ user, onLogin }) {
 
     if (user) {
       fetchAllData();
-    } else {
-      setLoading(false);
     }
   }, [user]);
 
@@ -174,17 +162,11 @@ function ProfilePage({ user, onLogin }) {
     try {
       console.log('Saving user info:', userInfo);
       
-      const response = await fetchWithAuth('/api/profile/info', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          nickname: userInfo.nickname,
-          school: userInfo.school,
-          class: userInfo.class,  // 确保发送 class 字段
-          achievements: userInfo.achievements
-        })
+      const response = await api.user.updateProfile({
+        nickname: userInfo.nickname,
+        school: userInfo.school,
+        class: userInfo.class,  // 确保发送 class 字段
+        achievements: userInfo.achievements
       });
 
       if (!response.ok) {
