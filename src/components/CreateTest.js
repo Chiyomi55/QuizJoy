@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './CreateTest.css';
 import { FaSearch, FaArrowUp, FaArrowDown, FaStar, FaRegStar, FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { fetchWithAuth } from '../utils/api';
+import { api } from '../utils/api';
 
 function CreateTest() {
   const navigate = useNavigate();
@@ -32,21 +32,12 @@ function CreateTest() {
   useEffect(() => {
     const fetchProblems = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/problems', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch problems');
-        }
-        
+        const response = await api.problems.getList();
         const data = await response.json();
         setProblems(data);
         setLoading(false);
       } catch (err) {
-        console.error('Failed to fetch problems:', err);
+        console.error('获取题目失败:', err);
         setError(err.message);
         setLoading(false);
       }
@@ -99,26 +90,18 @@ function CreateTest() {
 
   const handleSubmit = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/tests', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          title: testInfo.title,
-          type: testInfo.type,
-          deadline: testInfo.deadline,
-          difficulty: testInfo.difficulty,
-          questions: selectedQuestions.map(q => ({
-            problemId: q.id,
-            order: q.order
-          })),
-          description: testInfo.description,
-          estimatedTime: testInfo.estimatedTime,
-          topics: testInfo.topics
-        })
+      const response = await api.tests.create({
+        title: testInfo.title,
+        type: testInfo.type,
+        deadline: testInfo.deadline,
+        difficulty: testInfo.difficulty,
+        questions: selectedQuestions.map(q => ({
+          problemId: q.id,
+          order: q.order
+        })),
+        description: testInfo.description,
+        estimatedTime: testInfo.estimatedTime,
+        topics: testInfo.topics
       });
 
       if (response.ok) {
@@ -126,8 +109,8 @@ function CreateTest() {
         navigate('/teacher/tests');
       }
     } catch (error) {
-      console.error('Failed to create test:', error);
-      alert('创建小测失败，请稍后重试');
+      console.error('创建小测失败:', error);
+      alert(error.message || '创建小测失败，请稍后重试');
     }
   };
 

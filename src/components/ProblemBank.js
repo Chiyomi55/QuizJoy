@@ -21,29 +21,10 @@ function ProblemBank() {
   useEffect(() => {
     const fetchProblems = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const headers = {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        };
-        
-        // 如果有 token 就带上，没有也可以请求
-        if (token) {
-          headers['Authorization'] = `Bearer ${token}`;
-        }
-
-        const response = await fetch('http://localhost:5000/api/problems/', {
-          method: 'GET',
-          headers: headers,
-          credentials: 'omit'
-        });
-        
+        const response = await fetchWithAuth('/problems');
         if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Error response:', errorData);
-          throw new Error(errorData.error || errorData.msg || '获取题目失败');
+          throw new Error('获取题目失败');
         }
-        
         const data = await response.json();
         console.log('Fetched problems:', data);
         setProblems(data);
