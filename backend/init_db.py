@@ -5,7 +5,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app import create_app, db
 from app.models.user import User
 from app.models.problem import Problem, UserProblemStatus, DailyUserSubmission
-from app.models.test import Test
+from app.models.test import Test, TestResult, QuestionStat
 from datetime import datetime, timedelta
 import json
 import logging
@@ -91,6 +91,22 @@ def init_db():
             logger.info(f"已加载 {len(tests)} 份测试")
             db.session.commit()
             
+            # 导入测试结果数据
+            test_results = load_test_results()
+            result_count = 0
+            stat_count = 0
+            for item_type, item_data in test_results:
+                if item_type == 'test_result':
+                    result = TestResult(**item_data)
+                    db.session.add(result)
+                    result_count += 1
+                else:  # question_stat
+                    stat = QuestionStat(**item_data)
+                    db.session.add(stat)
+                    stat_count += 1
+            db.session.commit()
+            logger.info(f"已加载 {result_count} 份测试结果和 {stat_count} 条题目统计数据")
+            
             # 添加做题记录和活动数据
             logger.info("开始添加做题记录和活动数据...")
             # 获取所有可用的题目
@@ -161,6 +177,7 @@ def init_db():
             logger.info(f"- 添加了2个测试用户（学生和教师账号）")
             logger.info(f"- 添加了 {len(problems)} 道题目")
             logger.info(f"- 添加了 {len(tests)} 份测试")
+            logger.info(f"- 添加了 {result_count} 份测试结果和 {stat_count} 条题目统计数据")
             logger.info(f"- 添加了活动数据和对应的做题记录")
             logger.info(f"- 设置了 {STREAK_DAYS} 天的连续做题天数")
             
@@ -226,6 +243,13 @@ def load_tests():
             else:
                 test_list = data
                 
+            # 获取测试教师的ID
+            test_teacher = User.query.filter_by(username='test_teacher').first()
+            if test_teacher:
+                logger.info(f"找到测试教师ID: {test_teacher.id}")
+            else:
+                logger.warning("未找到测试教师账号")
+                
             for test_data in test_list:
                 # 删除id字段，让数据库自动生成
                 if 'id' in test_data:
@@ -241,6 +265,14 @@ def load_tests():
                     test_data['created_at'] = datetime.fromisoformat(test_data['created_at'].replace('Z', '+00:00'))
                 if 'deadline' in test_data and test_data['deadline']:
                     test_data['deadline'] = datetime.fromisoformat(test_data['deadline'].replace('Z', '+00:00'))
+                # 处理created_by字段
+                if 'created_by' in test_data and test_data['created_by'] == 'teacher1':
+                    if test_teacher:
+                        test_data['created_by'] = test_teacher.id
+                        logger.info(f"将测试 {test_data['title']} 的创建者设置为测试教师(ID: {test_teacher.id})")
+                    else:
+                        logger.warning(f"未找到测试教师账号，测试 {test_data['title']} 将没有创建者")
+                        test_data['created_by'] = None
                 tests.append(test_data)
             return tests
     except FileNotFoundError:
@@ -251,6 +283,47 @@ def load_tests():
         return []
     except Exception as e:
         logger.error(f"Error loading tests: {str(e)}")
+        return []
+
+def load_test_results():
+    file_path = os.path.join('data', 'tests', 'test_results.json')
+    full_path = os.path.join(os.getcwd(), '..', file_path)
+    logger.info(f"尝试读取测试结果文件: {full_path}")
+    
+    try:
+        with open(full_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            results = []
+            if isinstance(data, dict) and 'test_results' in data:
+                for test_id, result_data in data['test_results'].items():
+                    # 创建测试结果记录
+                    test_result = {
+                        'test_id': int(test_id),
+                        'total_students': result_data['total_students'],
+                        'completed_count': result_data['completed_count'],
+                        'average_score': result_data['average_score'],
+                        'average_time': result_data['average_time'],
+                        'completion_rate': result_data['completion_rate'],
+                        'pass_rate': result_data['pass_rate'],
+                        'score_distribution': json.dumps(result_data['score_distribution'])
+                    }
+                    results.append(('test_result', test_result))
+                    
+                    # 为每个题目创建统计记录
+                    for question_stat in result_data['question_stats']:
+                        stat = {
+                            'test_id': int(test_id),
+                            'question_id': question_stat['question_id'],
+                            'correct_rate': question_stat['correct_rate'],
+                            'average_time': question_stat['average_time']
+                        }
+                        results.append(('question_stat', stat))
+            return results
+    except FileNotFoundError:
+        logger.warning(f"Warning: {file_path} not found")
+        return []
+    except json.JSONDecodeError:
+        logger.warning(f"Warning: {file_path} is not valid JSON")
         return []
 
 if __name__ == '__main__':

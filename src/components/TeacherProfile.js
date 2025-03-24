@@ -135,7 +135,11 @@ function TeacherProfile({ user }) {
                 {user.avatar ? (
                   <img src={user.avatar} alt="头像" className="avatar" />
                 ) : (
-                  <FaUserCircle className="avatar-placeholder" />
+                  <img 
+                    src="https://file.302.ai/gpt/imgs/20250121/7f0cde4d3b0541598dab4244058bb566.jpeg" 
+                    alt="默认头像" 
+                    className="avatar" 
+                  />
                 )}
               </div>
               {!isEditing && (
@@ -234,19 +238,13 @@ function TeacherProfile({ user }) {
             )}
 
             <div className="stats-summary">
-              <div className="stat-card">
-                <FaBook />
-                <div className="stat-info">
-                  <span className="stat-value">3</span>
-                  <span className="stat-label">任教班级</span>
-                </div>
+              <div className="stats-card">
+                <div className="stats-title">任教班级</div>
+                <div className="stats-value">3</div>
               </div>
-              <div className="stat-card">
-                <FaChartBar />
-                <div className="stat-info">
-                  <span className="stat-value">105</span>
-                  <span className="stat-label">学生总数</span>
-                </div>
+              <div className="stats-card">
+                <div className="stats-title">学生总数</div>
+                <div className="stats-value">105</div>
               </div>
             </div>
 

@@ -1,0 +1,202 @@
+{
+    "test_results": {
+        "12": {
+            "total_students": 30,
+            "completed_count": 28,
+            "average_score": 85.5,
+            "average_time": 18,
+            "score_distribution": {
+                "90-100": 8,
+                "80-89": 12,
+                "60-79": 6,
+                "0-59": 2
+            },
+            "question_stats": [
+                {
+                    "question_id": 113,
+                    "correct_rate": 0.92,
+                    "average_time": 3.5
+                },
+                {
+                    "question_id": 114,
+                    "correct_rate": 0.85,
+                    "average_time": 4.2
+                },
+                {
+                    "question_id": 115,
+                    "correct_rate": 0.78,
+                    "average_time": 3.8
+                },
+                {
+                    "question_id": 116,
+                    "correct_rate": 0.88,
+                    "average_time": 3.2
+                },
+                {
+                    "question_id": 117,
+                    "correct_rate": 0.82,
+                    "average_time": 3.3
+                }
+            ],
+            "completion_rate": 93.3,
+            "pass_rate": 92.8
+        },
+        "13": {
+            "total_students": 30,
+            "completed_count": 30,
+            "average_score": 78.2,
+            "average_time": 42,
+            "score_distribution": {
+                "90-100": 5,
+                "80-89": 10,
+                "60-79": 12,
+                "0-59": 3
+            },
+            "question_stats": [
+                {
+                    "question_id": 118,
+                    "correct_rate": 0.88,
+                    "average_time": 4.1
+                },
+                {
+                    "question_id": 119,
+                    "correct_rate": 0.82,
+                    "average_time": 4.5
+                },
+                {
+                    "question_id": 120,
+                    "correct_rate": 0.75,
+                    "average_time": 4.8
+                },
+                {
+                    "question_id": 121,
+                    "correct_rate": 0.70,
+                    "average_time": 4.2
+                },
+                {
+                    "question_id": 122,
+                    "correct_rate": 0.85,
+                    "average_time": 3.9
+                },
+                {
+                    "question_id": 123,
+                    "correct_rate": 0.78,
+                    "average_time": 4.3
+                },
+                {
+                    "question_id": 124,
+                    "correct_rate": 0.72,
+                    "average_time": 4.1
+                },
+                {
+                    "question_id": 125,
+                    "correct_rate": 0.68,
+                    "average_time": 4.4
+                },
+                {
+                    "question_id": 126,
+                    "correct_rate": 0.80,
+                    "average_time": 3.8
+                },
+                {
+                    "question_id": 127,
+                    "correct_rate": 0.76,
+                    "average_time": 4.0
+                }
+            ],
+            "completion_rate": 100,
+            "pass_rate": 90
+        },
+        "14": {
+            "total_students": 30,
+            "completed_count": 29,
+            "average_score": 72.5,
+            "average_time": 85,
+            "score_distribution": {
+                "90-100": 3,
+                "80-89": 8,
+                "60-79": 15,
+                "0-59": 3
+            },
+            "question_stats": [
+                {
+                    "question_id": 128,
+                    "correct_rate": 0.85,
+                    "average_time": 5.5
+                },
+                {
+                    "question_id": 129,
+                    "correct_rate": 0.78,
+                    "average_time": 6.2
+                },
+                {
+                    "question_id": 130,
+                    "correct_rate": 0.72,
+                    "average_time": 5.8
+                },
+                {
+                    "question_id": 131,
+                    "correct_rate": 0.68,
+                    "average_time": 6.0
+                },
+                {
+                    "question_id": 132,
+                    "correct_rate": 0.75,
+                    "average_time": 5.5
+                },
+                {
+                    "question_id": 133,
+                    "correct_rate": 0.70,
+                    "average_time": 5.7
+                },
+                {
+                    "question_id": 134,
+                    "correct_rate": 0.65,
+                    "average_time": 5.9
+                },
+                {
+                    "question_id": 135,
+                    "correct_rate": 0.62,
+                    "average_time": 6.1
+                },
+                {
+                    "question_id": 136,
+                    "correct_rate": 0.73,
+                    "average_time": 5.6
+                },
+                {
+                    "question_id": 137,
+                    "correct_rate": 0.69,
+                    "average_time": 5.8
+                },
+                {
+                    "question_id": 138,
+                    "correct_rate": 0.71,
+                    "average_time": 5.4
+                },
+                {
+                    "question_id": 139,
+                    "correct_rate": 0.67,
+                    "average_time": 5.7
+                },
+                {
+                    "question_id": 140,
+                    "correct_rate": 0.74,
+                    "average_time": 5.3
+                },
+                {
+                    "question_id": 141,
+                    "correct_rate": 0.70,
+                    "average_time": 5.6
+                },
+                {
+                    "question_id": 142,
+                    "correct_rate": 0.76,
+                    "average_time": 5.2
+                }
+            ],
+            "completion_rate": 96.7,
+            "pass_rate": 89.7
+        }
+    }
+} 

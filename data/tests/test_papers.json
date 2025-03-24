@@ -135,6 +135,48 @@
             "type": "正式测试",
             "created_at": "2024-03-13T15:00:00Z",
             "deadline": "2024-03-20T23:59:59Z"
+        },
+        {
+            "id": 12,
+            "title": "第一章函数与导数周测",
+            "description": "本测试主要考察函数、导数的基本概念和应用",
+            "total_questions": 5,
+            "estimated_time": 20,
+            "topics": ["函数", "导数", "极限"],
+            "difficulty": 3,
+            "problem_ids": [113, 114, 115, 116, 117],
+            "type": "周测",
+            "created_at": "2024-03-15T10:00:00Z",
+            "deadline": "2024-03-22T23:59:59Z",
+            "created_by": "teacher1"
+        },
+        {
+            "id": 13,
+            "title": "三月月考",
+            "description": "本月考重点考察微积分、函数与数列的综合应用",
+            "total_questions": 10,
+            "estimated_time": 45,
+            "topics": ["微分", "积分", "函数", "导数", "数列"],
+            "difficulty": 4,
+            "problem_ids": [118, 119, 120, 121, 122, 123, 124, 125, 126, 127],
+            "type": "月考",
+            "created_at": "2024-03-01T09:00:00Z",
+            "deadline": "2024-03-08T23:59:59Z",
+            "created_by": "teacher1"
+        },
+        {
+            "id": 14,
+            "title": "2024春季期末考试",
+            "description": "本学期期末考试，全面考察本学期所学知识",
+            "total_questions": 15,
+            "estimated_time": 90,
+            "topics": ["微分", "积分", "函数", "导数", "极限", "三角函数", "数列"],
+            "difficulty": 5,
+            "problem_ids": [128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142],
+            "type": "期末考",
+            "created_at": "2024-01-10T09:00:00Z",
+            "deadline": "2024-01-20T23:59:59Z",
+            "created_by": "teacher1"
         }
     ]
 } 

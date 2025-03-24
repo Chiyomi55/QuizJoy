@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { List, Card, Tag, Space, Button, message } from 'antd';
 import './TeacherTestBank.css';
 import { FaPlus, FaSearch, FaChartLine } from 'react-icons/fa';
 import { api } from '../utils/api';
@@ -22,7 +23,6 @@ function TeacherTestBank() {
   // 筛选条件状态
   const [filters, setFilters] = useState({
     type: '全部',
-    timeRange: '全部',
     searchText: ''
   });
 
@@ -106,26 +106,28 @@ function TeacherTestBank() {
         </div>
       </div>
 
-      {/* 小测列表 */}
-      <div className="test-grid">
-        {filteredTests.length === 0 ? (
+      <List
+        grid={{ gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 3, xxl: 4 }}
+        dataSource={filteredTests}
+        locale={{ emptyText: (
           <div className="no-tests">
             <p>暂无小测数据</p>
             <button onClick={handleCreateTest}>创建第一个小测</button>
           </div>
-        ) : (
-          filteredTests.map(test => (
-            <div 
-              key={test.id} 
-              className="test-card" 
+        )}}
+        renderItem={test => (
+          <List.Item>
+            <Card
+              className="test-card"
               onClick={() => handleTestClick(test.id)}
+              bodyStyle={{ padding: '20px', height: '100%' }}
             >
-              <div className="test-header">
-                <span className="test-type">{test.type}</span>
-                <span className="test-date">{new Date(test.created_at).toLocaleDateString()}</span>
-              </div>
-              
               <div className="test-content">
+                <div className="test-header">
+                  <span className="test-type">{test.type}</span>
+                  <span className="test-date">{new Date(test.created_at).toLocaleDateString()}</span>
+                </div>
+                
                 <div className="test-main-info">
                   <h3 className="test-title">{test.title}</h3>
                   <div className="test-info">
@@ -141,44 +143,38 @@ function TeacherTestBank() {
                   </div>
                 </div>
 
-                <div className="completion-info">
-                  <span>完成情况: 25/30</span>
-                  <div className="completion-progress">
-                    <div 
-                      className="progress-bar" 
-                      style={{ width: `${(25/30) * 100}%` }}
-                    ></div>
-                  </div>
+                <div className="test-topics">
+                  {test.topics.map(topic => (
+                    <Tag 
+                      key={topic} 
+                      className="topic-tag"
+                    >
+                      {topic}
+                    </Tag>
+                  ))}
                 </div>
 
-                {test.topics && test.topics.length > 0 && (
-                  <div className="test-topics">
-                    {test.topics.slice(0, 2).map((topic, index) => (
-                      <span key={index} className="topic-tag">{topic}</span>
-                    ))}
-                    {test.topics.length > 2 && (
-                      <span className="topic-more">+{test.topics.length - 2}</span>
-                    )}
-                  </div>
-                )}
-              </div>
+                <div className="test-status">
+                  {test.deadline && (
+                    <div className="deadline-info">
+                      <span>截止日期: </span>
+                      {new Date(test.deadline).toLocaleDateString()}
+                    </div>
+                  )}
 
-              <div className="test-status">
-                {test.deadline && (
-                  <div className="deadline-info">
-                    <span>截止日期: </span>
-                    {new Date(test.deadline).toLocaleDateString()}
-                  </div>
-                )}
-
-                <span className="view-analysis">
-                  <FaChartLine /> 查看测试完成情况
-                </span>
+                  <Button
+                    type="primary"
+                    icon={<FaChartLine />}
+                    className="view-analysis"
+                  >
+                    查看分析
+                  </Button>
+                </div>
               </div>
-            </div>
-          ))
+            </Card>
+          </List.Item>
         )}
-      </div>
+      />
     </div>
   );
 }

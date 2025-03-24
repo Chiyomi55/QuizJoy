@@ -27,14 +27,11 @@ def create_app():
             r"/api/*": {
                 "origins": ["http://localhost:3000"],
                 "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-                "allow_headers": ["Content-Type", "Authorization", "Accept"],
-                "expose_headers": ["Content-Type", "Authorization"],
-                "supports_credentials": True,
-                "max_age": 600,
-                "send_wildcard": False
+                "allow_headers": ["content-type", "authorization", "accept", "origin", "x-requested-with"],
+                "expose_headers": ["content-type", "authorization"],
+                "supports_credentials": True
             }
-        },
-        supports_credentials=True
+        }
     )
     
     # 初始化扩展
